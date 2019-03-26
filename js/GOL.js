@@ -4,7 +4,7 @@
  * 
  */
 
-  var scene, camera, controls,renderer;
+  var scene, camera, controls, renderer;
   
   
   /* game components*/
