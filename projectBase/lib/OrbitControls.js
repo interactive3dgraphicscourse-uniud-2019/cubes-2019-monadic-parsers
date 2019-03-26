@@ -96,14 +96,6 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 	};
 
-	this.saveState = function () {
-
-		scope.target0.copy( scope.target );
-		scope.position0.copy( scope.object.position );
-		scope.zoom0 = scope.object.zoom;
-
-	};
-
 	this.reset = function () {
 
 		scope.target.copy( scope.target0 );
@@ -334,7 +326,7 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 			var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
 
-			if ( scope.object.isPerspectiveCamera ) {
+			if ( scope.object instanceof THREE.PerspectiveCamera ) {
 
 				// perspective
 				var position = scope.object.position;
@@ -348,7 +340,7 @@ THREE.OrbitControls = function ( object, domElement ) {
 				panLeft( 2 * deltaX * targetDistance / element.clientHeight, scope.object.matrix );
 				panUp( 2 * deltaY * targetDistance / element.clientHeight, scope.object.matrix );
 
-			} else if ( scope.object.isOrthographicCamera ) {
+			} else if ( scope.object instanceof THREE.OrthographicCamera ) {
 
 				// orthographic
 				panLeft( deltaX * ( scope.object.right - scope.object.left ) / scope.object.zoom / element.clientWidth, scope.object.matrix );
@@ -368,11 +360,11 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 	function dollyIn( dollyScale ) {
 
-		if ( scope.object.isPerspectiveCamera ) {
+		if ( scope.object instanceof THREE.PerspectiveCamera ) {
 
 			scale /= dollyScale;
 
-		} else if ( scope.object.isOrthographicCamera ) {
+		} else if ( scope.object instanceof THREE.OrthographicCamera ) {
 
 			scope.object.zoom = Math.max( scope.minZoom, Math.min( scope.maxZoom, scope.object.zoom * dollyScale ) );
 			scope.object.updateProjectionMatrix();
@@ -389,11 +381,11 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 	function dollyOut( dollyScale ) {
 
-		if ( scope.object.isPerspectiveCamera ) {
+		if ( scope.object instanceof THREE.PerspectiveCamera ) {
 
 			scale *= dollyScale;
 
-		} else if ( scope.object.isOrthographicCamera ) {
+		} else if ( scope.object instanceof THREE.OrthographicCamera ) {
 
 			scope.object.zoom = Math.max( scope.minZoom, Math.min( scope.maxZoom, scope.object.zoom / dollyScale ) );
 			scope.object.updateProjectionMatrix();
@@ -662,37 +654,29 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 		event.preventDefault();
 
-		switch ( event.button ) {
+		if ( event.button === scope.mouseButtons.ORBIT ) {
 
-			case scope.mouseButtons.ORBIT:
+			if ( scope.enableRotate === false ) return;
 
-				if ( scope.enableRotate === false ) return;
+			handleMouseDownRotate( event );
 
-				handleMouseDownRotate( event );
+			state = STATE.ROTATE;
 
-				state = STATE.ROTATE;
+		} else if ( event.button === scope.mouseButtons.ZOOM ) {
 
-				break;
+			if ( scope.enableZoom === false ) return;
 
-			case scope.mouseButtons.ZOOM:
+			handleMouseDownDolly( event );
 
-				if ( scope.enableZoom === false ) return;
+			state = STATE.DOLLY;
 
-				handleMouseDownDolly( event );
+		} else if ( event.button === scope.mouseButtons.PAN ) {
 
-				state = STATE.DOLLY;
+			if ( scope.enablePan === false ) return;
 
-				break;
+			handleMouseDownPan( event );
 
-			case scope.mouseButtons.PAN:
-
-				if ( scope.enablePan === false ) return;
-
-				handleMouseDownPan( event );
-
-				state = STATE.PAN;
-
-				break;
+			state = STATE.PAN;
 
 		}
 
@@ -713,31 +697,23 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 		event.preventDefault();
 
-		switch ( state ) {
+		if ( state === STATE.ROTATE ) {
 
-			case STATE.ROTATE:
+			if ( scope.enableRotate === false ) return;
 
-				if ( scope.enableRotate === false ) return;
+			handleMouseMoveRotate( event );
 
-				handleMouseMoveRotate( event );
+		} else if ( state === STATE.DOLLY ) {
 
-				break;
+			if ( scope.enableZoom === false ) return;
 
-			case STATE.DOLLY:
+			handleMouseMoveDolly( event );
 
-				if ( scope.enableZoom === false ) return;
+		} else if ( state === STATE.PAN ) {
 
-				handleMouseMoveDolly( event );
+			if ( scope.enablePan === false ) return;
 
-				break;
-
-			case STATE.PAN:
-
-				if ( scope.enablePan === false ) return;
-
-				handleMouseMovePan( event );
-
-				break;
+			handleMouseMovePan( event );
 
 		}
 
@@ -765,10 +741,9 @@ THREE.OrbitControls = function ( object, domElement ) {
 		event.preventDefault();
 		event.stopPropagation();
 
-		scope.dispatchEvent( startEvent );
-
 		handleMouseWheel( event );
 
+		scope.dispatchEvent( startEvent ); // not sure why these are here...
 		scope.dispatchEvent( endEvent );
 
 	}
@@ -888,8 +863,6 @@ THREE.OrbitControls = function ( object, domElement ) {
 	}
 
 	function onContextMenu( event ) {
-
-		if ( scope.enabled === false ) return;
 
 		event.preventDefault();
 
