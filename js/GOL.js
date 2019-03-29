@@ -1,8 +1,20 @@
 /**
- * Gioco della vita 3D 
+ * 3D Game of Life 
  */
 
-    var scene, camera, controls,renderer;
+	/* --- GLOBAL VARIABLES --- */
+
+	/* visualization */
+	var scene, camera, controls,renderer;
+	
+	/* enable stats */
+    var stats = new Stats();
+    stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+    document.body.appendChild( stats.dom );
+  
+    /* clock and delta-time (used to compute the time duration of each frame) */ 
+    var clock = new THREE.Clock();
+    var delta = 0; 	
   
     /* game settings (GM = game matrix) */
     var height=20;  //  GM height
@@ -19,10 +31,12 @@
     /* camera settings */
     var defaultPosition = new THREE.Vector3(0,0,20);
   
-    /* other variables to manage game's behaviour */
+    /* other variables to manage game's behaviour (settings) */
     var auto=false;      // auto update of GM flag
     var stepTime = 250;  // auto update delta time (in ms)
-    var step = stepTime; // variable measuring the remaining time before an auto update
+	var step = stepTime; // variable measuring the remaining time before an auto update
+	
+	/* active mode */
     var normalOperations = true;   // if the game is in the default mode 
     var settingsOperations = false; // if the game is in the settings screen (maybe)
   
@@ -31,23 +45,17 @@
     document.getElementById("opt_btn").addEventListener("click", setOptions); // set-option BTN
     document.getElementById("auto_btn").addEventListener("click", setAuto);   // set-auto BTN
   
-    /* animation variables */
+    /* animation variables (to be reused among differen timed animations) */
     var animationClock = new THREE.Clock();
-    var animationTime=0;
-	var alignAnimation = false;
-	var rotationAnimation = false;
-	var finalResultOfRotation;
-	var angleX, angleY, angleZ;
-	var animationTime,remainingAnimationTime;
+	var angleX, angleY, angleZ;    /* target rotation angles */
+	var animationTime;             /* animation total duration */
+	var remainingAnimationTime;    /* remaining time before the end of animation */
 
-    /* enable stats */
-    var stats = new Stats();
-    stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-    document.body.appendChild( stats.dom );
-  
-    /* clock and delta-time */ 
-    var clock = new THREE.Clock();
-    var delta = 0; 
+	/*--- animation types and dedicated variables ---*/
+	var alignAnimation = false;  
+
+	var rotationAnimation = false;
+	var finalResultOfRotation; /* used to fix approximation errors made at the end of the animation */
 
     /**
     * Enables auto update of the game matrix and sets update time
@@ -138,101 +146,6 @@
 		return alignAnimation || rotationAnimation;
 	}
 
-	/**
-	 *  rotation animation: align game matrix to camera
-	 */
-	function alignToCamera(){
-		if(!anyAnimation()){
-			alignAnimation = true;
-			normalOperations = false;
-			angleX = game.rotation.x-camera.rotation.x;
-			angleY = game.rotation.y-camera.rotation.y;
-			angleZ = game.rotation.z-camera.rotation.z;
-			animationTime = 500 / 1000;           // 500 ms;
-			remainingAnimationTime = animationTime;
-			animationClock.getDelta();            // initialize Clock
-			controls.enableRotation = false;
-		}
-	}
-
-	function rotateRight45(){
-		if(!anyAnimation()){
-			rotationAnimation = true;
-			normalOperations = false;
-			angleX = 0;
-			angleY = (45*Math.PI/180);
-			angleZ = 0;
-			animationTime = 500 / 1000;           // 500 ms;
-			remainingAnimationTime = animationTime;
-			animationClock.getDelta();            // initialize Clock
-			controls.enableRotation = false;
-			finalResultOfRotation = new THREE.Vector3(game.rotation.x-angleX,game.rotation.y-angleY,game.rotation.z-angleZ);
-		}
-	}
-
-	function rotateLeft45(){
-		if(!anyAnimation()){
-			rotationAnimation = true;
-			normalOperations = false;
-			angleX = 0;
-			angleY = -(45*Math.PI/180);
-			angleZ = 0;
-			animationTime = 500 / 1000;           // 500 ms;
-			remainingAnimationTime = animationTime;
-			animationClock.getDelta();            // initialize Clock
-			controls.enableRotation = false;
-			finalResultOfRotation = new THREE.Vector3(game.rotation.x-angleX,game.rotation.y-angleY,game.rotation.z-angleZ);
-		}
-	}
-
-	function rotateUp45(){
-		if(!anyAnimation()){
-			rotationAnimation = true;
-			normalOperations = false;
-			angleX = (45*Math.PI/180);
-			angleY = 0;
-			angleZ = 0;
-			animationTime = 500 / 1000;           // 500 ms;
-			remainingAnimationTime = animationTime;
-			animationClock.getDelta();            // initialize Clock
-			controls.enableRotation = false;
-			finalResultOfRotation = new THREE.Vector3(game.rotation.x-angleX,game.rotation.y-angleY,game.rotation.z-angleZ);
-		}
-	}
-
-	function rotateDown45(){
-		if(!anyAnimation()){
-			rotationAnimation = true;
-			normalOperations = false;
-			angleX = -(45*Math.PI/180);
-			angleY = 0;
-			angleZ = 0;
-			animationTime = 500 / 1000;           // 500 ms;
-			remainingAnimationTime = animationTime;
-			animationClock.getDelta();            // initialize Clock
-			controls.enableRotation = false;
-			finalResultOfRotation = new THREE.Vector3(game.rotation.x-angleX,game.rotation.y-angleY,game.rotation.z-angleZ);
-		}
-	}
-
-	/**
-	 * resumes normal execution after an alignment animation
-	 */
-	function endAlignAnimation(){
-		controls.enableRotation = true;
-		normalOperations = true;
-		alignAnimation = false;
-	}
-
-	/**
-	 * resumes normal execution after a rotation animation
-	 */
-	function endRotationAnimation(){
-		controls.enableRotation = true;
-		normalOperations = true;
-		rotationAnimation = false;
-	}
-
 	/* initialization: executed at page load */
 	function Init(){
 
@@ -277,34 +190,6 @@
 		}
 	}
   
-	/**
-	 * gradually aligns the game matrix to the camera
-	 */
-	function alignRender(){
-		var dlt = animationClock.getDelta();
-		remainingAnimationTime-=dlt;
-		game.rotation.x-=(angleX*dlt)/animationTime;
-		game.rotation.y-=(angleY*dlt)/animationTime;
-		game.rotation.z-=(angleZ*dlt)/animationTime;
-		if(remainingAnimationTime<0){
-			game.setRotation(camera.rotation);
-			endAlignAnimation();
-		}
-	}
-
-	function rotationRender(){
-		var dlt = animationClock.getDelta();
-		remainingAnimationTime-=dlt;
-		game.rotation.x-=(angleX*dlt)/animationTime;
-		game.rotation.y-=(angleY*dlt)/animationTime;
-		game.rotation.z-=(angleZ*dlt)/animationTime;
-		if(remainingAnimationTime<0){
-			game.setRotation(finalResultOfRotation);
-			endRotationAnimation();
-		}
-	}
-
-
     /* rendering loop */
     function Render(){
 		requestAnimationFrame(Render);
@@ -323,7 +208,6 @@
 			rotationRender();
 		}
 
-		
 		renderer.render(scene, camera);
 		stats.end();
   	
