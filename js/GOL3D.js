@@ -206,9 +206,17 @@ function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
     /* central pivot in 0,0,0 */
     this.pivot = new THREE.Object3D();
 
-    /* up and facing directions */
-    this.up = new THREE.Vector3(0,1,0);
-    this.face = new THREE.Vector3(0,0,1);
+    /* X,Y,Z local axses */
+    this.Y = new THREE.Object3D();
+    this.Y.position.y += 1;
+    this.X = new THREE.Object3D();
+    this.X.position.x += 1;
+    this.Z = new THREE.Object3D();
+    this.Z.position.z += 1;
+    this.pivot.add(this.Y);
+    this.pivot.add(this.X);
+    this.pivot.add(this.Z);
+
 
     /* size of the game matrix */
     this.height = height;
@@ -227,6 +235,8 @@ function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
 
     /*shortcut for rotation*/
     this.rotation = this.pivot.rotation;
+
+    
 
     //this.matrixAutoUpdate = false;
 

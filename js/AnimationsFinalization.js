@@ -1,4 +1,10 @@
-
+ /*
+    Remeber to:
+    1- enable camera rotation with OrbitControls
+    2- enable normalOperations
+    3- disable the animation flag 
+ */
+    
     /**
 	 * resumes normal execution after an alignment animation
 	 */

@@ -48,6 +48,8 @@
     /* animation variables (to be reused among differen timed animations) */
     var animationClock = new THREE.Clock();
 	var angleX, angleY, angleZ;    /* target rotation angles */
+	var angleAxsis;                /* angle for rotation on a given axis */
+	var rotationAxis;              /* axis for rotation */
 	var animationTime;             /* animation total duration */
 	var remainingAnimationTime;    /* remaining time before the end of animation */
 
@@ -186,7 +188,7 @@
 		step-=delta;
 		if(step<0){
 			game.update();        /* update */
-			step = stepTime; /* reset remaining time for next step */
+			step = stepTime;      /* reset remaining time for next step */
 		}
 	}
   
@@ -201,11 +203,11 @@
 		}
 
 		if(alignAnimation){
-			alignRender();
+			rotationRender();
 		}
 
 		if(rotationAnimation){
-			rotationRender();
+			rotationAxisRender();
 		}
 
 		renderer.render(scene, camera);
