@@ -52,12 +52,12 @@
 	var rotationAxis;              /* axis for rotation */
 	var animationTime;             /* animation total duration */
 	var remainingAnimationTime;    /* remaining time before the end of animation */
+	var finalResultOfRotation; /* used to fix approximation errors made at the end of the animation */
 
 	/*--- animation types and dedicated variables ---*/
-	var alignAnimation = false;  
+	var rotationAnimation = false;  
 
-	var rotationAnimation = false;
-	var finalResultOfRotation; /* used to fix approximation errors made at the end of the animation */
+	var rotationAxisAnimation = false;
 
     /**
     * Enables auto update of the game matrix and sets update time
@@ -145,7 +145,7 @@
     }
 
 	function anyAnimation(){
-		return alignAnimation || rotationAnimation;
+		return rotationAnimation || rotationAxisAnimation;
 	}
 
 	/* initialization: executed at page load */
@@ -202,11 +202,11 @@
 			autoUpdate();
 		}
 
-		if(alignAnimation){
+		if(rotationAnimation){
 			rotationRender();
 		}
 
-		if(rotationAnimation){
+		if(rotationAxisAnimation){
 			rotationAxisRender();
 		}
 

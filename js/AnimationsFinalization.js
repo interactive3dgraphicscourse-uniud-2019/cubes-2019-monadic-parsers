@@ -8,18 +8,18 @@
     /**
 	 * resumes normal execution after an alignment animation
 	 */
-	function endAlignAnimation(){
+	function endRotationAnimation(){
 		controls.enableRotation = true;
 		normalOperations = true;
-		alignAnimation = false;
+		rotationAnimation = false;
 	}
 
 	/**
 	 * resumes normal execution after a rotation animation
      * (valid for any rotation)
 	 */
-	function endRotationAnimation(){
+	function endRotationAxisAnimation(){
 		controls.enableRotation = true;
 		normalOperations = true;
-		rotationAnimation = false;
+		rotationAxisAnimation = false;
 	}

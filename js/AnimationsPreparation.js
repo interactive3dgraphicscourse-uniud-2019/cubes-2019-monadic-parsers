@@ -12,7 +12,7 @@
 	 */
 	function alignToCamera(){
 		if(!anyAnimation()){
-			alignAnimation = true;
+			rotationAnimation = true;
 			normalOperations = false;
 			angleX = game.rotation.x-camera.rotation.x;
 			angleY = game.rotation.y-camera.rotation.y;
@@ -45,7 +45,7 @@
 
 	function rotateRight45(){
 		if(!anyAnimation()){
-			rotationAnimation = true;
+			rotationAxisAnimation = true;
             normalOperations = false;
             /* compute rotation given the camera position */
 
@@ -64,7 +64,7 @@
 
 	function rotateLeft45(){
 		if(!anyAnimation()){
-			rotationAnimation = true;
+			rotationAxisAnimation = true;
             normalOperations = false;
             /* compute rotation given the camera position */
 
@@ -83,7 +83,7 @@
 
 	function rotateUp45(){
 		if(!anyAnimation()){
-			rotationAnimation = true;
+			rotationAxisAnimation = true;
             normalOperations = false;
             /* compute rotation given the camera position */
 
@@ -102,7 +102,7 @@
 
 	function rotateDown45(){
 		if(!anyAnimation()){
-			rotationAnimation = true;
+			rotationAxisAnimation = true;
             normalOperations = false;
             /* compute rotation given the camera position */
 

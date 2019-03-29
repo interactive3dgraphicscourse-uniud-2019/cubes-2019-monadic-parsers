@@ -37,7 +37,7 @@
 		game.rotateAxis(rotationAxis, (angleAxis*dlt)/animationTime);
 		if(remainingAnimationTime<0){
 			game.setRotation(finalResultOfRotation);
-			endRotationAnimation();
+			endRotationAxisAnimation();
 		}
 	}
 
