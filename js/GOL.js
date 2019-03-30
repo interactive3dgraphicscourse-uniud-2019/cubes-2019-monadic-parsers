@@ -130,8 +130,8 @@
 	    AAmax = document.getElementById("AAmax_in").value;
 	    DAmin = document.getElementById("DAmin_in").value;
 	    DAmax = document.getElementById("DAmax_in").value;
-		console.log("new Settings!");
-	    logStatus();
+		 console.log("new Settings!");
+	    //logStatus();
 	    reset();
     }
   
@@ -141,7 +141,7 @@
     function reset(){
 		game.dispose(scene);
 		game = new GOL3D(height, width, depth, AAmin, AAmax, DAmin, DAmax);
-	    game.addToScene(scene);
+	   game.addToScene(scene);
     }
 
 	function anyAnimation(){
@@ -154,7 +154,7 @@
 		/*--- common operations --*/
 		scene    = new THREE.Scene();
 		camera   = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1,        10000);
-		renderer = new THREE.WebGLRenderer();
+		renderer = new THREE.WebGLRenderer( {antialias: true} );
 		renderer.setSize(window.innerWidth, window.innerHeight);
 
 		/* axses helper */
@@ -174,7 +174,7 @@
 		game = new GOL3D(height, width, depth, AAmin, AAmax, DAmin, DAmax);
 		game.addToScene(scene);
 
-		console.log("INIT END")
+		//console.log("INIT END")
 	}
   
 	/* RENDERING FUNCTIONS */

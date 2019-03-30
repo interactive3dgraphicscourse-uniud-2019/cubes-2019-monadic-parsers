@@ -86,6 +86,8 @@ function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
                     }
                 }
             }
+
+            this.updateCubesColor();
         
             //this.pivot.matrixAutoUpdate = false;
             /* reset camera position and compute new default */
@@ -114,6 +116,67 @@ function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
                 }
             }  
         };
+
+    /**
+    * updates the color of the cubes accordingly to the number of neighbours
+    */
+    this.updateCubesColor = 
+        function() {
+            for(i = 0; i<this.gameMatrix.length; i++){
+                for(j = 0; j<this.gameMatrix[i].length; j++){
+                    for(k = 0; k<this.gameMatrix[i][j].length; k++){
+                        around = this.countAlive(i,j,k);
+                        if (around >= this.AAmin && around <= this.AAmax) {
+                            this.cubeMatrix[i][j][k].material = this.lifeMaterials[0];
+                        } else if (around < this.AAmin) {
+                            this.cubeMatrix[i][j][k].material = this.underMinMaterials[ around ];
+                        } else if (around > this.AAmax) {
+                            this.cubeMatrix[i][j][k].material = this.overMaxMaterials[ around - this.AAmax-1 ];
+                        } else {
+                            console.log("the number of alive cells around " + i + "," + j + "," + k + "is ill formed");
+                        }
+                    }
+                }
+            } 
+        };
+
+
+    /*
+    * sets the arrays lifeMaterials, underMinMaterials, overMaxMaterials with the correct materials according to AAmax, AAmin
+    */
+    this.setMaterials = 
+        function(){
+            //set material for cells with right amount of neighbours 
+            lifeMat = new THREE.MeshBasicMaterial( { color:0xffffff, wireframe: false, transparent: true, opacity: this.opacity } );
+            lifeMat.color.setHSL(THREE.Math.mapLinear(this.colorLife, 0, 360, 0, 1), this.colorSaturation, this.colorLuminosity);
+            this.lifeMaterials.push(lifeMat);
+
+            //set materials for cells with not enough neighbours
+            //assuming colorNoNeigh > colorBarelyNoNeigh
+            let hueIncrement = 0;
+            if ((this.AAmin-1) > 0) {
+                hueIncrement = (this.colorNoNeigh-this.colorBarelyNoNeigh)/(this.AAmin-1);
+            }
+            for (let i=0; i<this.AAmin; i++) {
+                let mat = new THREE.MeshBasicMaterial( { color:0xffffff, wireframe: false, transparent: true, opacity: this.opacity } );
+                let hue = this.colorNoNeigh - hueIncrement*i;
+                mat.color.setHSL(THREE.Math.mapLinear(hue, 0, 360, 0, 1), this.colorSaturation, this.colorLuminosity);
+                this.underMinMaterials.push(mat);
+            }
+
+            //set materials for cells with too many neighbours
+            //assuming colorBarelyTooNeigh > colorAllNeigh
+            hueIncrement = 0;
+            if ((26-(this.AAmax+1)) > 0) {
+                hueIncrement = (this.colorBarelyTooNeigh-this.colorAllNeigh)/(26-(this.AAmax+1));
+            }
+            for (let i=this.AAmax - (-1); i<=26; i++) { //javascript sucks
+                let mat = new THREE.MeshBasicMaterial( { color:0xffffff, wireframe: false, transparent: true, opacity: this.opacity } );
+                let hue = this.colorBarelyTooNeigh - hueIncrement*(i-(this.AAmax+1));
+                mat.color.setHSL(THREE.Math.mapLinear(hue, 0, 360, 0, 1), this.colorSaturation, this.colorLuminosity);
+                this.overMaxMaterials.push(mat);
+            }
+    };
 
     /**
     * counts how many cells are alive in the neighbourhood of cell (i,j,k)
@@ -184,6 +247,7 @@ function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
             
             this.gameMatrix = newGameMatrix;
             this.updateCubesVisibility();
+            this.updateCubesColor();
         };
 
 
@@ -217,6 +281,28 @@ function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
     this.pivot.add(this.X);
     this.pivot.add(this.Z);
 
+    /* life death options */
+    this.AAmin = AAmin;
+    this.AAmax = AAmax;
+    this.DAmin = DAmin;
+    this.DAmax = DAmax;
+
+    /* arrays for the materials */
+    this.underMinMaterials = [];
+    this.overMaxMaterials = [];
+    this.lifeMaterials = [];
+
+    /* material color (HSL) properties*/
+    this.opacity = 0.9;
+    this.colorLife = 110; //green
+    this.colorNoNeigh = 220; //blue
+    this.colorBarelyNoNeigh = 180; //sky blue
+    this.colorAllNeigh = 0; //red
+    this.colorBarelyTooNeigh = 60; //yellow
+    this.colorSaturation = 0.74;
+    this.colorLuminosity = 0.50;
+
+    this.setMaterials();
 
     /* size of the game matrix */
     this.height = height;
@@ -227,11 +313,6 @@ function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
     this.gameMatrix;
     this.cubeMatrix;
     this.initializeMatrices();
-
-    this.AAmin = AAmin;
-    this.AAmax = AAmax;
-    this.DAmin = DAmin;
-    this.DAmax = DAmax;
 
     /*shortcut for rotation*/
     this.rotation = this.pivot.rotation;
