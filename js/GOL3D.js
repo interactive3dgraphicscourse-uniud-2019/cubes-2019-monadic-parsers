@@ -125,15 +125,17 @@ function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
             for(i = 0; i<this.gameMatrix.length; i++){
                 for(j = 0; j<this.gameMatrix[i].length; j++){
                     for(k = 0; k<this.gameMatrix[i][j].length; k++){
-                        around = this.countAlive(i,j,k);
-                        if (around >= this.AAmin && around <= this.AAmax) {
-                            this.cubeMatrix[i][j][k].material = this.lifeMaterials[0];
-                        } else if (around < this.AAmin) {
-                            this.cubeMatrix[i][j][k].material = this.underMinMaterials[ around ];
-                        } else if (around > this.AAmax) {
-                            this.cubeMatrix[i][j][k].material = this.overMaxMaterials[ around - this.AAmax-1 ];
-                        } else {
-                            console.log("the number of alive cells around " + i + "," + j + "," + k + "is ill formed");
+                        if (this.cubeMatrix[i][j][k].visible) {
+                            around = this.countAlive(i,j,k);
+                            if (around >= this.AAmin && around <= this.AAmax) {
+                                this.cubeMatrix[i][j][k].material = this.lifeMaterials[0];
+                            } else if (around < this.AAmin) {
+                                this.cubeMatrix[i][j][k].material = this.underMinMaterials[ around ];
+                            } else if (around > this.AAmax) {
+                                this.cubeMatrix[i][j][k].material = this.overMaxMaterials[ around - this.AAmax-1 ];
+                            } else {
+                                console.log("the number of alive cells around " + i + "," + j + "," + k + "is ill formed");
+                            }
                         }
                     }
                 }
