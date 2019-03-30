@@ -156,6 +156,7 @@ function Init() {
 	camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
 	renderer = new THREE.WebGLRenderer({ antialias: true });
 	renderer.setSize(window.innerWidth, window.innerHeight);
+	renderer.setPixelRatio( 1 )
 
 	/* axses helper */
 	var axesHelper = new THREE.AxesHelper(5);
@@ -173,6 +174,9 @@ function Init() {
 	camera.position.set(defaultPosition.x, defaultPosition.y, defaultPosition.z);
 	game = new GOL3D(height, width, depth, AAmin, AAmax, DAmin, DAmax);
 	game.addToScene(scene);
+
+	terrain = new Terrain("res/heightmap15.png");
+	terrain.addToScene(scene);
 
 	//console.log("INIT END")
 }

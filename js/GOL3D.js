@@ -61,7 +61,7 @@ function GOL3D(height, width, depth, AAmin, AAmax, DAmin, DAmax) {
         function () {
 
             /* create new cube Geometry and Material */
-            cubeG = new THREE.CubeGeometry(1);
+            cubeG = new THREE.BoxBufferGeometry(1,1,1);
             cubeM = new THREE.MeshBasicMaterial({ color: 0x00AA00, wireframe: true });
 
             /* initialize the game matrix randomly */
