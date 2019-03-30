@@ -1,0 +1,71 @@
+/**
+ * Class used to represent the terrain underlying the cube matrix
+ * @param {*} filepath path to heightmap image in png format
+ */
+function Terrain(filepath) {
+
+   /**
+    * initializes the terrain
+    */
+   initializeTerrain =
+      function () {
+         let cubeG = new THREE.BoxBufferGeometry(scalingFactor, scalingFactor, scalingFactor);
+         let cubeM = new THREE.MeshBasicMaterial({ color: cubeColor, wireframe: false, transparent: true, opacity: cubeOpacity });
+
+         for (let i = 0; i < imgsize; i++) {
+            for (let j = 0; j < imgsize; j++) {
+               let value = data[i * imgsize + j];
+               let scaledValue = THREE.Math.mapLinear(value, 0, 255, 1, 30.0/scalingFactor);
+               let cube = new THREE.Mesh(cubeG, cubeM);
+               cube.position.set(i * scalingFactor - imgsize/2 * scalingFactor, -imgsize/2 * scalingFactor + scaledValue * scalingFactor - imgsize / 2, j * scalingFactor - imgsize/2*scalingFactor);
+               terrainObject.add(cube);
+            }
+         }
+      };
+
+   /**
+    * populates the field data with the colors of the png image
+    */
+   function getHeightData() {
+      var canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      imgsize = img.width;
+      var context = canvas.getContext('2d');
+
+      var size = img.width * img.height;
+      data = new Float32Array(size);
+
+      context.drawImage(img, 0, 0);
+
+      for (var i = 0; i < size; i++) {
+         data[i] = 0
+      }
+
+      var imgd = context.getImageData(0, 0, img.width, img.height);
+      var pix = imgd.data;
+
+      var j = 0;
+      for (var i = 0; i < pix.length; i += 4) {
+         var all = pix[i] + pix[i + 1] + pix[i + 2];  // all is in range 0 - 255*3
+         data[j] = all / 3;
+         j++;
+      }
+   }
+
+   this.addToScene = function (scene) { scene.add(terrainObject); };
+
+   let terrainObject = new THREE.Object3D();
+   let scalingFactor = 4;
+   let cubeOpacity = 0.4;
+   let cubeColor = 0xc2e5ed;
+   let imgsize;
+   let img = new Image();
+   let data = [];
+   img.onload = function () {
+      getHeightData(1);
+      initializeTerrain();
+   }
+   img.src = filepath;
+
+}

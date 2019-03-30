@@ -19,13 +19,13 @@
  * use pivot,up,facs fields for rotations
  * 
  */
-function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
+function GOL3D(height, width, depth, AAmin, AAmax, DAmin, DAmax) {
     /* METHODS */
 
     /* CREATION and DELATION */
 
-    this.setOptions = 
-        function (AAmin, AAmax, DAmin, DAmax){
+    this.setOptions =
+        function (AAmin, AAmax, DAmin, DAmax) {
             this.AAmin = AAmin;
             this.AAmax = AAmax;
             this.DAmin = DAmin;
@@ -36,11 +36,11 @@ function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
     * remove all cubes from the scene
     * @param scene
     */
-    this.dispose =   
-        function (scene){
-            for(i = 0; i<this.gameMatrix.length; i++){
-                for(j = 0; j<this.gameMatrix[i].length; j++){
-                    for(k = 0; k<this.gameMatrix[i][j].length; k++){
+    this.dispose =
+        function (scene) {
+            for (i = 0; i < this.gameMatrix.length; i++) {
+                for (j = 0; j < this.gameMatrix[i].length; j++) {
+                    for (k = 0; k < this.gameMatrix[i][j].length; k++) {
                         scene.remove(this.cubeMatrix[i][j][k]);
                     }
                 }
@@ -59,29 +59,29 @@ function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
     */
     this.initializeMatrices =
 
-        function() {
-            
+        function () {
+
             /* create new cube Geometry and Material */
-            cubeG = new THREE.CubeGeometry(1);
-            cubeM = new THREE.MeshBasicMaterial( { color:0x00AA00,wireframe: true } );
+            cubeG = new THREE.BoxBufferGeometry(1,1,1);
+            cubeM = new THREE.MeshBasicMaterial({ color: 0x00AA00, wireframe: true });
 
             /* initialize the game matrix randomly */
             /* the game matrix is directly associated to a cube matrix */
             this.gameMatrix = [];
             this.cubeMatrix = [];
-            for(i = 0; i<this.width; i++){
+            for (i = 0; i < this.width; i++) {
                 this.gameMatrix.push([])
                 this.cubeMatrix.push([])
-                for(j = 0; j<this.height; j++){
+                for (j = 0; j < this.height; j++) {
                     this.gameMatrix[i].push([]);
                     this.cubeMatrix[i].push([]);
-                    for(k = 0; k<this.depth; k++){
+                    for (k = 0; k < this.depth; k++) {
                         this.gameMatrix[i][j].push(Math.random() >= 0.5);
-                        this.cubeMatrix[i][j].push(new THREE.Mesh(cubeG,cubeM));
+                        this.cubeMatrix[i][j].push(new THREE.Mesh(cubeG, cubeM));
                         /* the cubes are displaced so that the 3D structure is centered in (0,0,0) */
-                        this.cubeMatrix[i][j][k].position.x+=i-(this.width/2);
-                        this.cubeMatrix[i][j][k].position.y+=j-(this.height/2);
-                        this.cubeMatrix[i][j][k].position.z-=k-(this.depth/2);
+                        this.cubeMatrix[i][j][k].position.x += i - (this.width / 2);
+                        this.cubeMatrix[i][j][k].position.y += j - (this.height / 2);
+                        this.cubeMatrix[i][j][k].position.z -= k - (this.depth / 2);
                         this.pivot.add(this.cubeMatrix[i][j][k]);    // add the newly created cube to the pivot
                         this.cubeMatrix[i][j][k].visible = this.gameMatrix[i][j][k];
                     }
@@ -89,7 +89,7 @@ function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
             }
 
             this.updateCubesColor();
-        
+
             //this.pivot.matrixAutoUpdate = false;
             /* reset camera position and compute new default */
             //maxZ = depth/2; // shift camera of half the depth of the cube matrix
@@ -100,67 +100,69 @@ function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
     /**
      * adds this object to a scene
      */
-    this.addToScene = function(scene) { scene.add(this.pivot); };
+    this.addToScene = function (scene) { scene.add(this.pivot); };
 
     /* UPDATE METHODS */
 
     /**
     * updates the visible cubes accordingly to the game matrix
     */
-    this.updateCubesVisibility = 
-        function(){	
-            for(i = 0; i<this.gameMatrix.length; i++){
-                for(j = 0; j<this.gameMatrix[i].length; j++){
-                    for(k = 0; k<this.gameMatrix[i][j].length; k++){
+    this.updateCubesVisibility =
+        function () {
+            for (i = 0; i < this.gameMatrix.length; i++) {
+                for (j = 0; j < this.gameMatrix[i].length; j++) {
+                    for (k = 0; k < this.gameMatrix[i][j].length; k++) {
                         this.cubeMatrix[i][j][k].visible = this.gameMatrix[i][j][k]
                     }
                 }
-            }  
+            }
         };
 
     /**
     * updates the color of the cubes accordingly to the number of neighbours
     */
-    this.updateCubesColor = 
-        function() {
-            for(i = 0; i<this.gameMatrix.length; i++){
-                for(j = 0; j<this.gameMatrix[i].length; j++){
-                    for(k = 0; k<this.gameMatrix[i][j].length; k++){
-                        around = this.countAlive(i,j,k);
-                        if (around >= this.AAmin && around <= this.AAmax) {
-                            this.cubeMatrix[i][j][k].material = this.lifeMaterials[0];
-                        } else if (around < this.AAmin) {
-                            this.cubeMatrix[i][j][k].material = this.underMinMaterials[ around ];
-                        } else if (around > this.AAmax) {
-                            this.cubeMatrix[i][j][k].material = this.overMaxMaterials[ around - this.AAmax-1 ];
-                        } else {
-                            console.log("the number of alive cells around " + i + "," + j + "," + k + "is ill formed");
+    this.updateCubesColor =
+        function () {
+            for (i = 0; i < this.gameMatrix.length; i++) {
+                for (j = 0; j < this.gameMatrix[i].length; j++) {
+                    for (k = 0; k < this.gameMatrix[i][j].length; k++) {
+                        if (this.cubeMatrix[i][j][k].visible) {
+                            around = this.countAlive(i, j, k);
+                            if (around >= this.AAmin && around <= this.AAmax) {
+                                this.cubeMatrix[i][j][k].material = this.lifeMaterials[0];
+                            } else if (around < this.AAmin) {
+                                this.cubeMatrix[i][j][k].material = this.underMinMaterials[around];
+                            } else if (around > this.AAmax) {
+                                this.cubeMatrix[i][j][k].material = this.overMaxMaterials[around - this.AAmax - 1];
+                            } else {
+                                console.log("the number of alive cells around " + i + "," + j + "," + k + "is ill formed");
+                            }
                         }
                     }
                 }
-            } 
+            }
         };
 
 
     /*
     * sets the arrays lifeMaterials, underMinMaterials, overMaxMaterials with the correct materials according to AAmax, AAmin
     */
-    this.setMaterials = 
-        function(){
+    this.setMaterials =
+        function () {
             //set material for cells with right amount of neighbours 
-            lifeMat = new THREE.MeshBasicMaterial( { color:0xffffff, wireframe: false, transparent: true, opacity: this.opacity } );
+            lifeMat = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: false, transparent: true, opacity: this.opacity });
             lifeMat.color.setHSL(THREE.Math.mapLinear(this.colorLife, 0, 360, 0, 1), this.colorSaturation, this.colorLuminosity);
             this.lifeMaterials.push(lifeMat);
 
             //set materials for cells with not enough neighbours
             //assuming colorNoNeigh > colorBarelyNoNeigh
             let hueIncrement = 0;
-            if ((this.AAmin-1) > 0) {
-                hueIncrement = (this.colorNoNeigh-this.colorBarelyNoNeigh)/(this.AAmin-1);
+            if ((this.AAmin - 1) > 0) {
+                hueIncrement = (this.colorNoNeigh - this.colorBarelyNoNeigh) / (this.AAmin - 1);
             }
-            for (let i=0; i<this.AAmin; i++) {
-                let mat = new THREE.MeshBasicMaterial( { color:0xffffff, wireframe: false, transparent: true, opacity: this.opacity } );
-                let hue = this.colorNoNeigh - hueIncrement*i;
+            for (let i = 0; i < this.AAmin; i++) {
+                let mat = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: false, transparent: true, opacity: this.opacity });
+                let hue = this.colorNoNeigh - hueIncrement * i;
                 mat.color.setHSL(THREE.Math.mapLinear(hue, 0, 360, 0, 1), this.colorSaturation, this.colorLuminosity);
                 this.underMinMaterials.push(mat);
             }
@@ -168,16 +170,16 @@ function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
             //set materials for cells with too many neighbours
             //assuming colorBarelyTooNeigh > colorAllNeigh
             hueIncrement = 0;
-            if ((26-(this.AAmax+1)) > 0) {
-                hueIncrement = (this.colorBarelyTooNeigh-this.colorAllNeigh)/(26-(this.AAmax+1));
+            if ((26 - (this.AAmax + 1)) > 0) {
+                hueIncrement = (this.colorBarelyTooNeigh - this.colorAllNeigh) / (26 - (this.AAmax + 1));
             }
-            for (let i=this.AAmax - (-1); i<=26; i++) { //javascript sucks
-                let mat = new THREE.MeshBasicMaterial( { color:0xffffff, wireframe: false, transparent: true, opacity: this.opacity } );
-                let hue = this.colorBarelyTooNeigh - hueIncrement*(i-(this.AAmax+1));
+            for (let i = this.AAmax - (-1); i <= 26; i++) { //javascript sucks
+                let mat = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: false, transparent: true, opacity: this.opacity });
+                let hue = this.colorBarelyTooNeigh - hueIncrement * (i - (this.AAmax + 1));
                 mat.color.setHSL(THREE.Math.mapLinear(hue, 0, 360, 0, 1), this.colorSaturation, this.colorLuminosity);
                 this.overMaxMaterials.push(mat);
             }
-    };
+        };
 
     /**
     * counts how many cells are alive in the neighbourhood of cell (i,j,k)
@@ -186,18 +188,18 @@ function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
     * @param k
     * @returns the number of alive cells surrounding (i,j,k)
     */
-    this.countAlive = 
-        function (i,j,k){
+    this.countAlive =
+        function (i, j, k) {
             var count = 0;
-            for(ii = i-1; ii<= i+1; ii++){
-                if(ii>=0 && ii<this.gameMatrix.length){
-                    for(jj = j-1; jj<=j+1; jj++){
-                        if(jj>=0 && jj<this.gameMatrix[i].length){
-                            
-                            for(kk=k-1; kk<=k+1; kk++){
-                                if(kk>=0 && kk<this.gameMatrix[i][j].length){
-                                    if(this.gameMatrix[ii][jj][kk] && (i!=ii||j!=jj||kk!=k)){
-                                        count+=1;
+            for (ii = i - 1; ii <= i + 1; ii++) {
+                if (ii >= 0 && ii < this.gameMatrix.length) {
+                    for (jj = j - 1; jj <= j + 1; jj++) {
+                        if (jj >= 0 && jj < this.gameMatrix[i].length) {
+
+                            for (kk = k - 1; kk <= k + 1; kk++) {
+                                if (kk >= 0 && kk < this.gameMatrix[i][j].length) {
+                                    if (this.gameMatrix[ii][jj][kk] && (i != ii || j != jj || kk != k)) {
+                                        count += 1;
                                     }
                                 }
                             }
@@ -212,40 +214,40 @@ function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
     * computes the next state of the simulation
     */
     this.update =
-        function (){
-        
+        function () {
+
             /* initialize new game matrix */
             newGameMatrix = [];
-            for(i = 0; i<this.gameMatrix.length; i++){
+            for (i = 0; i < this.gameMatrix.length; i++) {
                 newGameMatrix.push([]);
-                for(j = 0; j<this.gameMatrix[i].length; j++){
+                for (j = 0; j < this.gameMatrix[i].length; j++) {
                     newGameMatrix[i].push([]);
-                    for(k = 0; k<this.gameMatrix[i][j].length; k++){
+                    for (k = 0; k < this.gameMatrix[i][j].length; k++) {
                         newGameMatrix[i][j].push(false);
                     }
                 }
             }
 
             /* compute the next simulation step applying alive-dead transitions */
-            for(i = 0; i<this.gameMatrix.length; i++){
-                for(j = 0; j<this.gameMatrix[i].length; j++){
-                    for(k = 0; k<this.gameMatrix[i][j].length; k++){
-                        living_neighbour = this.countAlive(i,j,k);
+            for (i = 0; i < this.gameMatrix.length; i++) {
+                for (j = 0; j < this.gameMatrix[i].length; j++) {
+                    for (k = 0; k < this.gameMatrix[i][j].length; k++) {
+                        living_neighbour = this.countAlive(i, j, k);
                         /* if alive */
-                        if(this.gameMatrix[i][j][k]){
-                            if(living_neighbour>=this.AAmin && living_neighbour<=this.AAmax){
+                        if (this.gameMatrix[i][j][k]) {
+                            if (living_neighbour >= this.AAmin && living_neighbour <= this.AAmax) {
                                 newGameMatrix[i][j][k] = true;
                             }
-                        /* if dead */
-                        }else{ 
-                            if(living_neighbour>=this.DAmin && living_neighbour<=this.DAmax){
+                            /* if dead */
+                        } else {
+                            if (living_neighbour >= this.DAmin && living_neighbour <= this.DAmax) {
                                 newGameMatrix[i][j][k] = true;
                             }
                         }
                     }
                 }
             }
-            
+
             this.gameMatrix = newGameMatrix;
             this.updateCubesVisibility();
             this.updateCubesColor();
@@ -253,7 +255,7 @@ function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
 
 
 
-    this.rotateAxis = 
+    this.rotateAxis =
         function (axis, angle) {
             m = new THREE.Matrix4();
             m.makeRotationAxis(axis.normalize(), angle);
@@ -261,9 +263,9 @@ function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
             this.pivot.rotation.setFromRotationMatrix(this.pivot.matrix);
         };
 
-    this.setRotation = 
+    this.setRotation =
         function (target) {
-            this.pivot.rotation.set(target.x,target.y, target.z);
+            this.pivot.rotation.set(target.x, target.y, target.z);
         };
 
     /* FIELDS */
@@ -307,8 +309,8 @@ function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
 
     /* size of the game matrix */
     this.height = height;
-    this.width  = width;
-    this.depth  = depth;
+    this.width = width;
+    this.depth = depth;
 
     /* game matrix ad cube matrix */
     this.gameMatrix;
@@ -318,7 +320,7 @@ function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
     /*shortcut for rotation*/
     this.rotation = this.pivot.rotation;
 
-    
+
 
     //this.matrixAutoUpdate = false;
 
