@@ -59,6 +59,10 @@
 
 	var rotationAxisAnimation = false;
 
+	var exploding = false;
+
+	var ExpolsionObject;
+
     /**
     * Enables auto update of the game matrix and sets update time
     */
@@ -115,9 +119,17 @@
 		}else if(e.code == "ArrowDown"){ 
 		    /* R: reset game matrix */
 			rotateDown45();
+		}else if(e.code == "KeyE"){
+			/* explode */
+			explosion();
 		}
 	    
-    }
+	}
+	
+	function explosion(){
+		ExpolsionObject = new Explosion(game, scene);
+		exploding = true;
+	}
 
     /**
     * sets settings and resets the game
@@ -208,6 +220,11 @@
 
 		if(rotationAxisAnimation){
 			rotationAxisRender();
+		}
+
+		if(exploding){
+			var dlt = animationClock.getDelta();
+			ExpolsionObject.doMovement(dlt);
 		}
 
 		renderer.render(scene, camera);

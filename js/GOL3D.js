@@ -46,6 +46,7 @@ function GOL3D( height, width, depth, AAmin, AAmax, DAmin, DAmax ){
                 }
             }
             scene.remove(this.pivot);	  
+            this.update = function(){ return };
         };
 
 
