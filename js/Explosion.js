@@ -75,12 +75,25 @@ function Explosion(game, scene){
         }
     };
 
+    this.addCubes = function(cubes){
+        for(let i=0; i<cubes.length; i++){
+            this.cubes.push(cubes[i]);
+        }
+    };
+
+    this.dispose = function(scene){
+        for (let i = 0; i<this.cubes.length; i++){
+            scene.remove(this.cubes[i]);
+        }
+    }
+
 
     game.dispose(scene); 
     this.cubes = [];
     this.velocities = [];
     this.gravity = new THREE.Vector3(0,-9.8,0);
     this.getActiveCubes(game);
-    this.setMovementInfoOfCubes(); // to be reoved if it is needed to add other cubes 
+    //this.setMovementInfoOfCubes(); // to be reoved if it is needed to add other cubes 
+
    
 }

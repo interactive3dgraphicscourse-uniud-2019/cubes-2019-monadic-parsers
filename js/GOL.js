@@ -2,7 +2,6 @@
  * 3D Game of Life 
  */
 
-
 /* --- GLOBAL VARIABLES --- */
 
 /* visualization */
@@ -129,8 +128,13 @@ function inputReader(e) {
 }
 
 function explosion(){
-	ExpolsionObject = new Explosion(game, scene);
-	exploding = true;
+	if(!exploding){
+		animationClock.getDelta();
+		ExpolsionObject = new Explosion(game, scene);
+		ExpolsionObject.addCubes(currentTerrainCubes);
+		ExpolsionObject.setMovementInfoOfCubes()
+		exploding = true;
+	}
 }
 
 
@@ -157,6 +161,13 @@ function reset() {
 	game.dispose(scene);
 	game = new GOL3D(height, width, depth, AAmin, AAmax, DAmin, DAmax);
 	game.addToScene(scene);
+	if(exploding){
+		ExpolsionObject.dispose(scene);
+		terrain.removeFromScene(scene);
+		terrain = new Terrain("res/heightmap15.png");
+		terrain.addToScene(scene);
+		exploding = false;
+	}
 }
 
 function anyAnimation() {

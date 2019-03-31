@@ -1,8 +1,11 @@
+var currentTerrainCubes = [];
+
 /**
  * Class used to represent the terrain underlying the cube matrix
  * @param {*} filepath path to heightmap image in png format
  */
 function Terrain(filepath) {
+
 
    /**
     * initializes the terrain
@@ -18,6 +21,7 @@ function Terrain(filepath) {
                let scaledValue = THREE.Math.mapLinear(value, 0, 255, 1, 30.0/scalingFactor);
                let cube = new THREE.Mesh(cubeG, cubeM);
                cube.position.set(i * scalingFactor - imgsize/2 * scalingFactor, -imgsize/2 * scalingFactor + scaledValue * scalingFactor - imgsize / 2, j * scalingFactor - imgsize/2*scalingFactor);
+               currentTerrainCubes.push(cube);
                terrainObject.add(cube);
             }
          }
@@ -54,6 +58,8 @@ function Terrain(filepath) {
    }
 
    this.addToScene = function (scene) { scene.add(terrainObject); };
+   this.removeFromScene = function (scene) { scene.remove(terrainObject); };
+
 
    let terrainObject = new THREE.Object3D();
    let scalingFactor = 4;
