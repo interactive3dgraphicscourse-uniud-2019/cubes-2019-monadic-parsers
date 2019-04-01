@@ -19,9 +19,9 @@ var helpEnabled = false;
 
 
 /* enable stats */
-var stats = new Stats();
-stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-document.body.appendChild(stats.dom);
+//var stats = new Stats();
+//stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+//document.body.appendChild(stats.dom);
 
 /* clock and delta-time (used to compute the time duration of each frame) */
 var clock = new THREE.Clock();
@@ -44,7 +44,7 @@ var defaultPosition = new THREE.Vector3(0, 0, 20);
 
 /* other variables to manage game's behaviour (settings) */
 var auto = false;      // auto update of GM flag
-var stepTime = 250;  // auto update delta time (in ms)
+var stepTime = 0.250;  // auto update delta time (in ms)
 var step = stepTime; // variable measuring the remaining time before an auto update
 
 /* active mode */
@@ -53,8 +53,6 @@ var settingsOperations = false; // if the game is in the settings screen (maybe)
 
 /* manage input for simulation management*/
 document.addEventListener('keydown', inputReader); // keyboard
-document.getElementById("opt_btn").addEventListener("click", setOptions); // set-option BTN
-document.getElementById("auto_btn").addEventListener("click", setAuto);   // set-auto BTN
 
 /* animation variables (to be reused among differen timed animations) */
 var animationClock = new THREE.Clock();
@@ -80,14 +78,8 @@ var ExpolsionObject;
 */
 function setAuto() {
 	delta = clock.getDelta(); // reset delta
-	stepTime = document.getElementById("auto_in").value / 1000; //ms conversion
 	step = stepTime;
 	auto = !auto;             // change auto status
-	if (auto) {                 // update button text
-		document.getElementById("auto_btn").innerHTML = "STOP AUTO";
-	} else {
-		document.getElementById("auto_btn").innerHTML = "START AUTO";
-	}
 }
 
 /**
@@ -145,10 +137,7 @@ function inputReader(e) {
 	} else if (e.code == "KeyA") {
 		/* enable auto update */
 		setAuto();
-	} else if (e.code == "KeyP") {
-		/* show settings menu */
-		init_menu();
-	}
+	} 
 
 }
 
@@ -160,23 +149,6 @@ function explosion() {
 		ExpolsionObject.setMovementInfoOfCubes()
 		exploding = true;
 	}
-}
-
-
-/**
-* sets settings and resets the game
-*/
-function setOptions() {
-	height = document.getElementById("height_in").value;
-	width = document.getElementById("width_in").value;
-	depth = document.getElementById("depth_in").value;
-	AAmin = document.getElementById("AAmin_in").value;
-	AAmax = document.getElementById("AAmax_in").value;
-	DAmin = document.getElementById("DAmin_in").value;
-	DAmax = document.getElementById("DAmax_in").value;
-	console.log("new Settings!");
-	//logStatus();
-	reset();
 }
 
 /**
@@ -193,6 +165,10 @@ function reset() {
 		terrain.addToScene(scene);
 		exploding = false;
 	}
+	OK_hud = false;
+	hudScene.remove(HUD_obj);
+	VoxelHUD();
+	hudScene.add(HUD_obj);
 }
 
 function anyAnimation() {
@@ -200,6 +176,10 @@ function anyAnimation() {
 }
 
 var charA;
+
+
+
+
 
 /* initialization: executed at page load */
 function Init() {
@@ -233,13 +213,39 @@ function Init() {
 	terrain = new Terrain("res/heightmap15.png");
 	terrain.addToScene(scene);
 
-	hud = HUD_obj;
 	//hud.position.x += window.innerWidth/2;
 	//hud.position.y += 10;
-	hudScene.add(hud);
+	hudScene.add(HUD_obj);
 	hudScene.add(HelpObj);
 
 	//console.log("INIT END")
+	var gui = new dat.GUI({hideable: false});
+
+	effectController = {
+		width:width,
+		height:height,
+		depth:depth,
+		Stay_alive_min:AAmin,
+		Stay_alive_max:AAmax,
+		Become_alive_min:DAmin,
+		Become_alive_max:DAmax,
+		Auto_step_time:stepTime
+		
+	}
+
+	var sizeFolder = gui.addFolder('Game matrix dimensions');
+	var lifeFolder = gui.addFolder('Options for life and death');
+
+	sizeFolder.add( effectController, 'width', 1, 30,  1 ).onChange(function(){ width = effectController.width });
+	sizeFolder.add( effectController, 'height', 1, 30,  1 ).onChange(function(){ height = effectController.height });
+	sizeFolder.add( effectController, 'depth', 1, 30, 1 ).onChange(function(){ depth = effectController.depth });
+	lifeFolder.add( effectController, 'Stay_alive_min', 0, 26, 1 ).onChange(function(){ AAmin = effectController.Stay_alive_min });
+	lifeFolder.add( effectController, 'Stay_alive_max', 0, 26, 1 ).onChange(function(){ AAmax = effectController.Stay_alive_max });
+	lifeFolder.add( effectController, 'Become_alive_min', 0, 26, 1 ).onChange(function(){ DAmin = effectController.Become_alive_min });
+	lifeFolder.add( effectController, 'Become_alive_max', 0, 26, 1 ).onChange(function(){ DAmax = effectController.Become_alive_max });
+	gui.add( effectController, 'Auto_step_time', 0.050, 2.00, 0.050 ).onChange(function(){ stepTime = effectController.Auto_step_time });
+	var info = gui.addFolder('Press H to view keyboard shortcuts');
+	var info = gui.addFolder('Press R to apply changes and reset');
 }
 
 /* RENDERING FUNCTIONS */
@@ -300,7 +306,7 @@ function Render() {
 		
 		requestAnimationFrame(Render);
 	
-		stats.begin();
+		//stats.begin();
 		controls.update();
 
 		if (auto) {
@@ -329,7 +335,7 @@ function Render() {
 			renderer.render(helpScene, hudCamera);
 		}
 
-		stats.end();
+		//stats.end();
 	}
 }
 

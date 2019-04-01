@@ -14,15 +14,20 @@ function UpdateFPS() {
       offFPS = (TextScaleFactor*FPS.length / 2);
       FPS.object.position.x += -baseWidth * 48 + offFPS;
       FPS.object.position.y += baseHeight * 45.5;
-      HUD_obj.remove(HUD_content[5]);
-      HUD_content[5] = FPS.object;
-      HUD_obj.add(HUD_content[5]);
+      HUD_obj.remove(HUD_content[2].object);
+      HUD_content[2] = FPS;
+      HUD_obj.add(HUD_content[2].object);
    }
 }
 
 function VoxelHUD() {
    if (!OK_hud) {
       try {
+
+         HUD_obj.children = [];
+         HUD_content = [];
+
+
          let baseHeight = window.innerHeight * 0.01;
          let baseWidth = window.innerWidth * 0.01
 
@@ -38,9 +43,9 @@ function VoxelHUD() {
          applyTransformationToChars(FPS, function(x) { x.rotation.x += Math.PI/8; x.rotation.y += Math.PI/8 });
 
          offOpt = TextScaleFactor*(OptP.length / 2);
-         if((baseWidth * 45 + offOpt) > window.innerWidth/2){
-            TextScaleFactor = 1.;
-         }
+         //if((baseWidth * 45 + offOpt) > window.innerWidth/2){
+         //   TextScaleFactor = 1.5;
+         //}
 
          OptP.object.scale.set(TextScaleFactor,TextScaleFactor,TextScaleFactor);
          HelpH.object.scale.set(TextScaleFactor,TextScaleFactor,TextScaleFactor);
@@ -64,11 +69,11 @@ function VoxelHUD() {
          FPS.object.position.x += -baseWidth * 48 + offFPS;
          FPS.object.position.y += baseHeight * 45.5;
 
-         HUD_content.push(OptP);
-         HUD_content.push(HelpH);
+         //HUD_content.push(OptP);
+         //HUD_content.push(HelpH);
          HUD_content.push(dims);
-         HUD_content.push(OptP);
          HUD_content.push(options);
+         HUD_content.push(FPS);
          //HUD_content.push(FPS); //5
          for (let i = 0; i < HUD_content.length; i++) {
             HUD_obj.add(HUD_content[i].object);
