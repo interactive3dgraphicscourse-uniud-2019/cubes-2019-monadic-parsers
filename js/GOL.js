@@ -1,11 +1,22 @@
 /**
  * 3D Game of Life 
+ * TODO fai in modo di separare nettamente le azioni sul menu e sulla scena principale usando i flag (menuMode) 
+ * (per i bottoni)
  */
 
 /* --- GLOBAL VARIABLES --- */
 
 /* visualization */
 var scene, camera, controls, renderer;
+var hudScene, hudCamera;
+var helpScene;
+
+var hudEnabled = true;
+var hudCounter = 1.;
+var OK_hud = false;
+var frameCount = 0;
+var helpEnabled = false;
+
 
 /* enable stats */
 var stats = new Stats();
@@ -97,10 +108,11 @@ function logStatus() {
 * @param e (event)
 */
 function inputReader(e) {
-	if (e.code == "KeyA") {
+
+	if (e.code == "Enter") {
 		/* A: update game matrix manually */
-		console.log("Using:");
-		logStatus();
+		//console.log("Using:");
+		//logStatus();
 		game.update();
 	} else if (e.code == "KeyR") {
 		/* R: reset game matrix */
@@ -120,15 +132,28 @@ function inputReader(e) {
 	} else if (e.code == "ArrowDown") {
 		/* R: reset game matrix */
 		rotateDown45();
-	} else if(e.code == "KeyE"){
+	} else if (e.code == "KeyE") {
 		/* explode */
 		explosion();
+	} else if (e.code == "KeyX") {
+		/* toggle hud */
+		hudEnabled = !hudEnabled;
+	} else if (e.code == "KeyH") {
+		/* toggle help */
+		helpEnabled = !helpEnabled;
+		HelpObj.visible = !HelpObj.visible;
+	} else if (e.code == "KeyA") {
+		/* enable auto update */
+		setAuto();
+	} else if (e.code == "KeyP") {
+		/* show settings menu */
+		init_menu();
 	}
 
 }
 
-function explosion(){
-	if(!exploding){
+function explosion() {
+	if (!exploding) {
 		animationClock.getDelta();
 		ExpolsionObject = new Explosion(game, scene);
 		ExpolsionObject.addCubes(currentTerrainCubes);
@@ -161,7 +186,7 @@ function reset() {
 	game.dispose(scene);
 	game = new GOL3D(height, width, depth, AAmin, AAmax, DAmin, DAmax);
 	game.addToScene(scene);
-	if(exploding){
+	if (exploding) {
 		ExpolsionObject.dispose(scene);
 		terrain.removeFromScene(scene);
 		terrain = new Terrain("res/heightmap15.png");
@@ -174,19 +199,23 @@ function anyAnimation() {
 	return rotationAnimation || rotationAxisAnimation;
 }
 
+var charA;
+
 /* initialization: executed at page load */
 function Init() {
+	prepareFontMatrices(fontsMatrices);
 
 	/*--- common operations --*/
 	scene = new THREE.Scene();
+	hudScene = new THREE.Scene();
+	helpScene = new THREE.Scene();
+	hudCamera = new THREE.OrthographicCamera(-window.innerWidth/2 , window.innerWidth / 2, window.innerHeight / 2, -window.innerHeight / 2, -30, 30);
+
 	camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
 	renderer = new THREE.WebGLRenderer({ antialias: true });
+	renderer.autoClear = false; // to display the HUD
 	renderer.setSize(window.innerWidth, window.innerHeight);
-	renderer.setPixelRatio( 1 )
-
-	/* axses helper */
-	var axesHelper = new THREE.AxesHelper(5);
-	scene.add(axesHelper);
+	renderer.setPixelRatio(1)
 
 	/* controls */
 	controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -204,6 +233,12 @@ function Init() {
 	terrain = new Terrain("res/heightmap15.png");
 	terrain.addToScene(scene);
 
+	hud = HUD_obj;
+	//hud.position.x += window.innerWidth/2;
+	//hud.position.y += 10;
+	hudScene.add(hud);
+	hudScene.add(HelpObj);
+
 	//console.log("INIT END")
 }
 
@@ -214,7 +249,7 @@ function Init() {
  */
 function autoUpdate() {
 	/* update auto clock */
-	delta = clock.getDelta();
+	//delta = clock.getDelta();
 	step -= delta;
 	if (step < 0) {
 		game.update();        /* update */
@@ -222,53 +257,84 @@ function autoUpdate() {
 	}
 }
 
+/* menu variables */
+
+var menuScene;
+var menuCamera;
+var menuMode = false;
+
+function init_menu() {
+	if (menuMode) {
+		menuMode = false;
+	} else {
+		menuScene = new THREE.Scene();
+		menuCamera = new THREE.OrthographicCamera(-window.innerWidth / 2, window.innerWidth / 2, window.innerHeight / 2, -window.innerHeight / 2, -1000, 1000);
+		menuMode = true;
+		//pageS  = preparePageSettings(menuScene);
+		pageLD = preparePageLifeAndDeath(menuScene);
+
+	}
+
+}
+
+
+
 /* rendering loop */
 function Render() {
-	requestAnimationFrame(Render);
-	stats.begin();
-	controls.update();
-
-	if (auto) {
-		autoUpdate();
-	}
-
-	if (rotationAnimation) {
-		rotationRender();
-	}
-
-	if (rotationAxisAnimation) {
-		rotationAxisRender();
-	}
-  
-    /* rendering loop */
-    function Render(){
+	
+	if (menuMode) {
 		requestAnimationFrame(Render);
+		renderer.render(menuScene, menuCamera);
+	} else {
+		Help(hudScene);
+		delta = clock.getDelta();
+		frameCount++;
+		hudCounter -= delta;
+		
+		if (hudCounter < 0) {
+			VoxelHUD();
+			UpdateFPS();
+			hudCounter = 1.;
+			frameCount = 0;
+		}
+		
+		requestAnimationFrame(Render);
+	
 		stats.begin();
 		controls.update();
 
-		if(auto){
+		if (auto) {
 			autoUpdate();
 		}
 
-		if(rotationAnimation){
+		if (rotationAnimation) {
 			rotationRender();
 		}
 
-		if(rotationAxisAnimation){
+		if (rotationAxisAnimation) {
 			rotationAxisRender();
 		}
 
-		if(exploding){
+		if (exploding) {
 			var dlt = animationClock.getDelta();
 			ExpolsionObject.doMovement(dlt);
 		}
 
+
 		renderer.render(scene, camera);
+		if (hudEnabled) {
+			renderer.render(hudScene, hudCamera);
+		}
+		if (helpEnabled) {
+			renderer.render(helpScene, hudCamera);
+		}
+
 		stats.end();
-  	
 	}
 }
-  
+
+
+
 Init();
 Render();
 

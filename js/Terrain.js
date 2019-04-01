@@ -12,7 +12,7 @@ function Terrain(filepath) {
     */
    initializeTerrain =
       function () {
-         let cubeG = new THREE.BoxBufferGeometry(scalingFactor, scalingFactor, scalingFactor);
+         let cubeG = new THREE.BoxGeometry(scalingFactor, scalingFactor, scalingFactor);
          let cubeM = new THREE.MeshBasicMaterial({ color: cubeColor, wireframe: false, transparent: true, opacity: cubeOpacity });
 
          for (let i = 0; i < imgsize; i++) {
@@ -25,6 +25,7 @@ function Terrain(filepath) {
                terrainObject.add(cube);
             }
          }
+         
       };
 
    /**
@@ -63,8 +64,8 @@ function Terrain(filepath) {
 
    let terrainObject = new THREE.Object3D();
    let scalingFactor = 4;
-   let cubeOpacity = 0.4;
-   let cubeColor = 0xc2e5ed;
+   let cubeOpacity = 0.2;
+   let cubeColor = 0xCCF1F4;
    let imgsize;
    let img = new Image();
    let data = [];

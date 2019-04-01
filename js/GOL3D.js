@@ -170,12 +170,12 @@ function GOL3D(height, width, depth, AAmin, AAmax, DAmin, DAmax) {
             //set materials for cells with too many neighbours
             //assuming colorBarelyTooNeigh > colorAllNeigh
             hueIncrement = 0;
-            if ((26 - (this.AAmax + 1)) > 0) {
-                hueIncrement = (this.colorBarelyTooNeigh - this.colorAllNeigh) / (26 - (this.AAmax + 1));
+            if ((26 - (this.AAmax - (-1) )) > 0) {
+                hueIncrement = (this.colorBarelyTooNeigh - this.colorAllNeigh) / (26 - (this.AAmax - (-1) ));
             }
             for (let i = this.AAmax - (-1); i <= 26; i++) { //javascript sucks
                 let mat = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: false, transparent: true, opacity: this.opacity });
-                let hue = this.colorBarelyTooNeigh - hueIncrement * (i - (this.AAmax + 1));
+                let hue = this.colorBarelyTooNeigh - hueIncrement * (i - (this.AAmax - (-1) ));
                 mat.color.setHSL(THREE.Math.mapLinear(hue, 0, 360, 0, 1), this.colorSaturation, this.colorLuminosity);
                 this.overMaxMaterials.push(mat);
             }
@@ -296,13 +296,13 @@ function GOL3D(height, width, depth, AAmin, AAmax, DAmin, DAmax) {
     this.lifeMaterials = [];
 
     /* material color (HSL) properties*/
-    this.opacity = 0.9;
+    this.opacity = 0.8;
     this.colorLife = 110; //green
     this.colorNoNeigh = 220; //blue
     this.colorBarelyNoNeigh = 180; //sky blue
     this.colorAllNeigh = 0; //red
     this.colorBarelyTooNeigh = 60; //yellow
-    this.colorSaturation = 0.74;
+    this.colorSaturation = 0.60;
     this.colorLuminosity = 0.50;
 
     this.setMaterials();
