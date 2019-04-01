@@ -26,7 +26,7 @@ function Help() {
          let baseHeight = window.innerHeight * 0.01;
          let baseWidth = window.innerWidth * 0.01
 
-         var keys = ["H:", "X:", "", "R:", "E:", "A:", "Enter:", "", "Arrows:", "(.):","", "HELP:"];
+         var keys = ["H:", "X:", "", "R:", "E:", "A:", "Enter:", "", "Arrows:", "(.):","", "--- HELP ---"];
          var commands = ["show help", "toggle HUD", "", "reset game", "explode game", "auto update", "single step", "", "rotate game", "align camera","", ""];
 
          var verticalPos = -(keys.length-1)*baseHeight * 3/2;

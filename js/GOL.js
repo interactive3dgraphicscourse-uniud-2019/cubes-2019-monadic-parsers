@@ -129,16 +129,24 @@ function inputReader(e) {
 		explosion();
 	} else if (e.code == "KeyX") {
 		/* toggle hud */
-		hudEnabled = !hudEnabled;
+		showHUD();
 	} else if (e.code == "KeyH") {
 		/* toggle help */
-		helpEnabled = !helpEnabled;
-		HelpObj.visible = !HelpObj.visible;
+		showHelp();
 	} else if (e.code == "KeyA") {
 		/* enable auto update */
 		setAuto();
 	} 
 
+}
+
+function showHUD(){
+	hudEnabled = !hudEnabled;
+}
+
+function showHelp(){
+	helpEnabled = !helpEnabled;
+	HelpObj.visible = !HelpObj.visible;
 }
 
 function explosion() {
@@ -229,9 +237,15 @@ function Init() {
 		Stay_alive_max:AAmax,
 		Become_alive_min:DAmin,
 		Become_alive_max:DAmax,
-		Auto_step_time:stepTime
+		Auto_step_time:stepTime,
+		Explode: function(){  explosion(); },
+		Set_auto: function(){  setAuto(); },
+		Reset: function() { reset(); },
+		Toggle_Hud:  function() { showHUD(); },
+		Toggle_Help:  function() { showHelp(); }
+
 		
-	}
+	};
 
 	var sizeFolder = gui.addFolder('Game matrix dimensions');
 	var lifeFolder = gui.addFolder('Options for life and death');
@@ -244,8 +258,14 @@ function Init() {
 	lifeFolder.add( effectController, 'Become_alive_min', 0, 26, 1 ).onChange(function(){ DAmin = effectController.Become_alive_min });
 	lifeFolder.add( effectController, 'Become_alive_max', 0, 26, 1 ).onChange(function(){ DAmax = effectController.Become_alive_max });
 	gui.add( effectController, 'Auto_step_time', 0.050, 2.00, 0.050 ).onChange(function(){ stepTime = effectController.Auto_step_time });
-	var info = gui.addFolder('Press H to view keyboard shortcuts');
-	var info = gui.addFolder('Press R to apply changes and reset');
+	var miscFolder = gui.addFolder('Miscellaneous');
+	miscFolder.add(effectController, 'Explode');
+	miscFolder.add(effectController, 'Set_auto');
+	miscFolder.add(effectController, 'Reset');
+	miscFolder.add(effectController, 'Toggle_Hud');
+	miscFolder.add(effectController, 'Toggle_Help');
+	var info1 = gui.addFolder('Press H to view keyboard shortcuts');
+	var info2 = gui.addFolder('Press R to apply changes and reset');
 }
 
 /* RENDERING FUNCTIONS */
