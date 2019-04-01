@@ -9,18 +9,7 @@
 		</style>
 	</head>
 	<body>
-		<h1>Game of Life in 3D!</h1> 
-		Height: <input type="number" min="1" max="1000" id="height_in" value="20">
-		Width:  <input type="number" min="1" max="1000" id="width_in" value="20">
-		Depth:  <input type="number" min="1" max="1000" id="depth_in" value="1"><br>
-		step time for auto (ms):  <input type="number" min="50" id="auto_in" value="250"><br>
-		Alive->Alive min:  <input type="number" id="AAmin_in" value="2">
-		Alive->Alive max:  <input type="number" id="AAmax_in" value="3"><br>
-		Death->Alive min:  <input type="number" id="DAmin_in" value="3">
-		Death->Alive max:  <input type="number" id="DAmax_in" value="3"><br>
-		<button type="button" id="opt_btn">SET OPTIONS</button>
-		<button type="button" id="auto_btn">START AUTO</button>
-		use "A" to advance in the simulation, "R" to reset 
+		<script src='lib/dat.gui.min.js'></script> <!--https://github.com/dataarts/dat.gui-->
 		<script src="lib/three.js"></script>
 		<script src="lib/stats.min.js"></script>
 		<script src="lib/OrbitControls.js"></script>

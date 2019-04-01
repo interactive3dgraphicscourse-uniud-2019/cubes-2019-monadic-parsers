@@ -8,6 +8,10 @@ for (let i = 0; i < charList.length; i++) {
 }
 
 function loadFont(letter, out_variable) {
+	if(letter == "!"){ letter="bang"; }
+	if(letter == "."){ letter="dot"; }
+	if(letter == ":"){ letter="column"; }
+	if(letter == "-"){ letter="minus"; }
 	var fileToLoad = "res/fonts/" + letter + ".jjba";
 	var loader = new THREE.FileLoader();
 	//load a text file and output the result to the console

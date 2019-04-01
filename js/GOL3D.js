@@ -81,7 +81,7 @@ function GOL3D(height, width, depth, AAmin, AAmax, DAmin, DAmax) {
                         /* the cubes are displaced so that the 3D structure is centered in (0,0,0) */
                         this.cubeMatrix[i][j][k].position.x += i - (this.width / 2);
                         this.cubeMatrix[i][j][k].position.y += j - (this.height / 2);
-                        this.cubeMatrix[i][j][k].position.z -= k - (this.depth / 2);
+                        this.cubeMatrix[i][j][k].position.z -= k - (this.depth / 2) +0.5;
                         this.pivot.add(this.cubeMatrix[i][j][k]);    // add the newly created cube to the pivot
                         this.cubeMatrix[i][j][k].visible = this.gameMatrix[i][j][k];
                     }
