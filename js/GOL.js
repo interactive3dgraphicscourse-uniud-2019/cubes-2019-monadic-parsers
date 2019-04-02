@@ -48,7 +48,7 @@ function prepareGUI(){
 	lifeFolder.add(effectController, 'Become_alive_min', 0, 26, 1).onChange(function () { DAmin = effectController.Become_alive_min; reset(); });
 	lifeFolder.add(effectController, 'Become_alive_max', 0, 26, 1).onChange(function () { DAmax = effectController.Become_alive_max; reset(); });
 	/* auto time */
-	gui.add(effectController, 'Auto_step_time', 0.050, 2.00, 0.050).onChange(function () { stepTime = effectController.Auto_step_time; reset(); });
+	gui.add(effectController, 'Auto_step_time', 0.050, 2.00, 0.050).onChange(function () { stepTime = effectController.Auto_step_time; });
 	/* misc */
 	var miscFolder = gui.addFolder('Miscellaneous');
 	miscFolder.add(effectController, 'Explode');
