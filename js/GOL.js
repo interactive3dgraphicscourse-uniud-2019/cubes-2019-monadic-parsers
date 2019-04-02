@@ -34,7 +34,8 @@ function prepareGUI(){
 		Toggle_Hud: function () { showHUD(); },
 		Help: function () { showHelp(); },
 		Switch_camera: function () { changeCamera(); },
-		HUD_scale:TextScaleFactor
+		HUD_scale:TextScaleFactor,
+		Spawn_probability:spawnProbability
 	};
 	/* size options */
 	var sizeFolder = gui.addFolder('Game matrix dimensions');
@@ -49,6 +50,7 @@ function prepareGUI(){
 	lifeFolder.add(effectController, 'Become_alive_max', 0, 26, 1).onChange(function () { DAmax = effectController.Become_alive_max; reset(); });
 	/* auto time */
 	gui.add(effectController, 'Auto_step_time', 0.050, 2.00, 0.050).onChange(function () { stepTime = effectController.Auto_step_time; });
+	gui.add(effectController, 'Spawn_probability', 0., 1., 0.005).onChange(function () { spawnProbability = effectController.Spawn_probability; });
 	/* misc */
 	var miscFolder = gui.addFolder('Miscellaneous');
 	miscFolder.add(effectController, 'Explode');

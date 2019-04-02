@@ -70,6 +70,9 @@ let pos_orto = new THREE.Vector3();
 let rot_orto = new THREE.Vector3();
 let zoom_orto = new THREE.Vector3();
 
+/*--- random spawn probability ---*/
+let spawnProbability = 0.5;
+
 /*--- font variables ---*/
 /* list of characters objects */ 
 var fontsMatrices = [];

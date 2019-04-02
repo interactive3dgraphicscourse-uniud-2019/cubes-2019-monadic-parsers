@@ -73,7 +73,7 @@ function GOL3D(height, width, depth, AAmin, AAmax, DAmin, DAmax) {
                     this.gameMatrix[i].push([]);
                     this.cubeMatrix[i].push([]);
                     for (k = 0; k < this.depth; k++) {
-                        this.gameMatrix[i][j].push(Math.random() >= 0.5);
+                        this.gameMatrix[i][j].push(Math.random() >= 1.-spawnProbability);
                         this.cubeMatrix[i][j].push(new THREE.Mesh(cubeG, cubeM));
                         /* the cubes are displaced so that the 3D structure is centered in (0,0,0) */
                         this.cubeMatrix[i][j][k].position.x += i - (this.width / 2);
