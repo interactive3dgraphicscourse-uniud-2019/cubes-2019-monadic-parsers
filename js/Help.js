@@ -1,65 +1,56 @@
-/*
-* 
-h open help
-p open options
-x toggle HUD
----
-r restart game
-e explode game
-a enable auto update
-enter single step
-----
-arrows rotate cube
-. align game to camera
-
-*/
-
-var HelpObj = new THREE.Object3D();
-var helpReady = false;
 
 
+/**
+ * async load of help message box
+ * uses global variable helpReady to know if it is necessari to reload it
+ * (to be used in the rendering loop)
+ */
 function Help() {
-   if (!helpReady) {
+   if (!helpReady) { // help must not be loaded (change this flag for updates)
       try {
 
-         HelpObj.position.z = 10;
+         HelpObj.position.z = 10; // necessary for ortographic camera
 
+         /* use window variables to make interface adaptive to real space */
          let baseHeight = window.innerHeight * 0.01;
          let baseWidth = window.innerWidth * 0.01
 
+         /* help messages (reverse order)*/
          var keys = ["H:", "X:", "", "R:", "E:", "A:", "Enter:", "", "P:", "Arrows:", "(.):","", "--- HELP ---"];
          var commands = ["show help", "toggle HUD", "", "reset game", "explode game", "auto update", "single step", "", "change camera", "rotate game", "align camera","", ""];
 
+         /* center message vertically */
          var verticalPos = -(keys.length-1)*baseHeight * 3/2;
-
-         
          var maxlen = 0;
 
+         /* prepare and position text messages */
          for (let i = 0; i < keys.length; i++) {
-            /* BUG: size is not exact */
             let str = prepareString((keys[i] + " " + commands[i]).toUpperCase());
-            
             str.object.position.y += verticalPos;
             str.object.scale.set(TextScaleFactor,TextScaleFactor,TextScaleFactor);
             verticalPos += baseHeight * 3;
+            /* BUG: size is not exactly computed... */
             maxlen = Math.max(maxlen,str.length*TextScaleFactor);
             HelpObj.add(str.object);
          }
 
+         /* add semi-ransparent black background plane */
          rectX = maxlen + baseWidth*2;
          rectY = (2+keys.length) *baseHeight * 3
-         /* prepare background rectangle for help message */
+         
          var geometry = new THREE.PlaneGeometry( rectX, rectY, 0 );
          var material = new THREE.MeshBasicMaterial( {color: 0x000000, side: THREE.DoubleSide, transparent: true, opacity: 0.7} );
          var HelpBG   = new THREE.Mesh(geometry, material);
          
+         /* add bg to object */
          HelpObj.add(HelpBG);
 
+         /* set flags for async load */
          helpReady = true;
          HelpObj.visible = false;
 
       } catch(e){
-         //console.log(e)
+         // avoid problems if resources are not ready
       }
    }
 };

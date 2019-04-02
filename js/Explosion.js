@@ -1,7 +1,10 @@
 /**
  * Class that manages the explosion of the cube matrix
+ * 
+ * note that it is necessary to execute this.setMovementInfoOfCubes(); 
+ * after adding all cubes to compute the explosion correctly
  * @param {*} game   cube matrix
- * @param {*} scene  
+ * @param {*} scene  the scene where this animation should be rendered
  */
 function Explosion(game, scene){
 
@@ -43,10 +46,10 @@ function Explosion(game, scene){
             PlainVec.normalize();
             let dot = VIni.dot(PlainVec);
             let angle = Math.acos(dot);
+
             /* decompose speed on the plane created by the speed vector and its projection */
             var VUp  = new THREE.Vector3();
             var VLat = new THREE.Vector3();
-
             VLat = Math.cos(angle);
             VUp  = (this.cubes[i].position.y>0?1.:-1.)*Math.cos(Math.PI/2-angle);
             var direction = PlainVec;
@@ -74,31 +77,35 @@ function Explosion(game, scene){
 
             /* accelerated movement */
             let vertSpace = 1/2*this.gravity.y*(delta)+info.VUp*(delta) 
-
             info.VUp = 1/2*this.gravity.y*(delta)+info.VUp;
             cube.position.y += vertSpace;
         }
     };
 
+    /**
+     * adds a list of cubes to be animated 
+     * @param cubes list of cubes (could actually be any 3D object)
+     */
     this.addCubes = function(cubes){
         for(let i=0; i<cubes.length; i++){
             this.cubes.push(cubes[i]);
         }
     };
 
+    /**
+     * remove every all the animated object from the given scene
+     * @param scene 
+     */
     this.dispose = function(scene){
         for (let i = 0; i<this.cubes.length; i++){
             scene.remove(this.cubes[i]);
         }
     }
 
-
     game.dispose(scene); 
     this.cubes = [];
     this.velocities = [];
     this.gravity = new THREE.Vector3(0,-9.8,0);
     this.getActiveCubes(game);
-    //this.setMovementInfoOfCubes(); // to be reoved if it is needed to add other cubes 
-
    
 }
