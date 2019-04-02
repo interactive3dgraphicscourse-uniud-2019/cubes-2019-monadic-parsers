@@ -1,4 +1,3 @@
-
 /**
  * request to load a single character from the resources
  * @param {*} letter char to be loaded
@@ -135,7 +134,7 @@ function prepareString(text){
 			char3D.position.x += coord - (text.length*7+(text.length-1))/2; 
 		}	
 	}
-	return {object:center, chars:chars, length : chars.length*7+(chars.length-1)};
+	return {object:center, chars:chars, length : chars.length*9+(chars.length-1)};
 }
 
 /**

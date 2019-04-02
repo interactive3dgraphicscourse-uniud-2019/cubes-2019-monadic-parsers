@@ -1,5 +1,3 @@
-
-
 /**
  * async load of help message box
  * uses global variable helpReady to know if it is necessari to reload it
@@ -9,6 +7,7 @@ function Help() {
    if (!helpReady) { // help must not be loaded (change this flag for updates)
       try {
 
+         HelpObj.children = [];
          HelpObj.position.z = 10; // necessary for ortographic camera
 
          /* use window variables to make interface adaptive to real space */
@@ -29,7 +28,7 @@ function Help() {
             str.object.position.y += verticalPos;
             str.object.scale.set(TextScaleFactor,TextScaleFactor,TextScaleFactor);
             verticalPos += baseHeight * 3;
-            /* BUG: size is not exactly computed... */
+
             maxlen = Math.max(maxlen,str.length*TextScaleFactor);
             HelpObj.add(str.object);
          }
@@ -47,7 +46,6 @@ function Help() {
 
          /* set flags for async load */
          helpReady = true;
-         HelpObj.visible = false;
 
       } catch(e){
          // avoid problems if resources are not ready

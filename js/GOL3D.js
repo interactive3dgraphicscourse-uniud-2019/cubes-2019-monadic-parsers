@@ -1,4 +1,3 @@
-
 /**
  * Class to represent an instance of GOL3D
  * @param {*} height dimension of game matrix

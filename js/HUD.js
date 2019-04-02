@@ -1,5 +1,3 @@
-
-
 /**
  * updares the fps counter (to be used in the rendering loop)
  */
@@ -14,7 +12,7 @@ function UpdateFPS() {
       let baseWidth = window.innerWidth * 0.01
       offFPS = (TextScaleFactor*FPS.length / 2);
       FPS.object.position.x += -baseWidth * 48 + offFPS;
-      FPS.object.position.y += baseHeight * 45.5;
+      FPS.object.position.y += baseHeight * 44;
       /* update HUD object (FPS counter is in position 2)*/   
       HUD_obj.remove(HUD_content[2].object);
       HUD_content[2] = FPS;
@@ -50,6 +48,9 @@ function VoxelHUD() {
          applyTransformationToChars(options, function(x) { x.rotation.x += Math.PI/8; x.rotation.y += Math.PI/8 });
          let FPS = prepareString("FPS: " + frameCount);
          applyTransformationToChars(FPS, function(x) { x.rotation.x += Math.PI/8; x.rotation.y += Math.PI/8 });
+         let Name = prepareString("GAME OF LIFE 3D!");
+         applyTransformationToChars(Name, function(x) { x.rotation.x += Math.PI/8; x.rotation.y += Math.PI/8 });
+
 
          /* scaling */
          offOpt = TextScaleFactor*(OptP.length / 2);
@@ -61,11 +62,13 @@ function VoxelHUD() {
          dims.object.scale.set(TextScaleFactor,TextScaleFactor,TextScaleFactor);
          options.object.scale.set(TextScaleFactor,TextScaleFactor,TextScaleFactor);
          FPS.object.scale.set(TextScaleFactor,TextScaleFactor,TextScaleFactor);
+         Name.object.scale.set(TextScaleFactor,TextScaleFactor,TextScaleFactor);
 
          /* positioning */
          offOpt = TextScaleFactor*(OptP.length / 2);
          OptP.object.position.x += baseWidth * 45 - offOpt;
          OptP.object.position.y += baseHeight * 47;
+
          offHelp = TextScaleFactor*HelpH.length / 2;
          HelpH.object.position.x += baseWidth * 45 - offHelp;
          HelpH.object.position.y += baseHeight * 44;
@@ -75,9 +78,13 @@ function VoxelHUD() {
          options.object.position.x += 0;
          options.object.position.y += baseHeight * 44;
 
-         offFPS = (TextScaleFactor*FPS.length / 2);
+         offName = (TextScaleFactor*Name.length/2 );
+         Name.object.position.x += -baseWidth * 48 + offName;
+         Name.object.position.y += baseHeight * 47;
+
+         offFPS = (TextScaleFactor*FPS.length/2 );
          FPS.object.position.x += -baseWidth * 48 + offFPS;
-         FPS.object.position.y += baseHeight * 45.5;
+         FPS.object.position.y += baseHeight * 44;
 
          /* add to HUD objects */
          //HUD_content.push(OptP);
@@ -85,12 +92,13 @@ function VoxelHUD() {
          HUD_content.push(dims);
          HUD_content.push(options);
          HUD_content.push(FPS);
+         HUD_content.push(Name);
 
          for (let i = 0; i < HUD_content.length; i++) {
             HUD_obj.add(HUD_content[i].object);
          }
          OK_hud = true; // set flag to signal the success of async loading
-      } catch{
+      } catch (e){
          // ignore errors due to resource loading 
       }
    }
