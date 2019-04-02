@@ -56,7 +56,12 @@ function prepareGUI(){
 	miscFolder.add(effectController, 'Reset');
 	miscFolder.add(effectController, 'Toggle_Hud');
 	miscFolder.add(effectController, 'Switch_camera');
-	miscFolder.add(effectController, 'HUD_scale', 0.2, 2.8, 0.1).onChange(function () { TextScaleFactor = effectController.HUD_scale; OK_hud=false; helpReady=false;});
+	miscFolder.add(effectController, 'HUD_scale', 0.2, 2.8, 0.1).onChange(function () {
+		TextScaleFactor = effectController.HUD_scale;
+		OK_hud=false; 
+		helpReady=false;
+		lineOffset = 3*TextScaleFactor/1.5;
+	});
 	/* help button */
 	gui.add(effectController, 'Help');
 }
@@ -119,7 +124,7 @@ var menuCamera;
 function Render() {
 	requestAnimationFrame(Render);
 	delta = clock.getDelta(); // compute frame time
-	Help(hudScene);           // async load of help msg
+	Help();           // async load of help msg
 	VoxelHUD();              // async load of HUD
 
 	frameCount++;

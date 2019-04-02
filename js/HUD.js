@@ -12,7 +12,7 @@ function UpdateFPS() {
       let baseWidth = window.innerWidth * 0.01
       offFPS = (TextScaleFactor*FPS.length / 2);
       FPS.object.position.x += -baseWidth * 48 + offFPS;
-      FPS.object.position.y += baseHeight * 44;
+      FPS.object.position.y += baseHeight * (47-lineOffset);
       /* update HUD object (FPS counter is in position 2)*/   
       HUD_obj.remove(HUD_content[2].object);
       HUD_content[2] = FPS;
@@ -71,12 +71,12 @@ function VoxelHUD() {
 
          offHelp = TextScaleFactor*HelpH.length / 2;
          HelpH.object.position.x += baseWidth * 45 - offHelp;
-         HelpH.object.position.y += baseHeight * 44;
+         HelpH.object.position.y += baseHeight * (47-lineOffset);
 
          dims.object.position.x += 0;
          dims.object.position.y += baseHeight * 47;
          options.object.position.x += 0;
-         options.object.position.y += baseHeight * 44;
+         options.object.position.y += baseHeight * (47-lineOffset);
 
          offName = (TextScaleFactor*Name.length/2 );
          Name.object.position.x += -baseWidth * 48 + offName;
@@ -84,7 +84,7 @@ function VoxelHUD() {
 
          offFPS = (TextScaleFactor*FPS.length/2 );
          FPS.object.position.x += -baseWidth * 48 + offFPS;
-         FPS.object.position.y += baseHeight * 44;
+         FPS.object.position.y += baseHeight * (47-lineOffset);
 
          /* add to HUD objects */
          //HUD_content.push(OptP);

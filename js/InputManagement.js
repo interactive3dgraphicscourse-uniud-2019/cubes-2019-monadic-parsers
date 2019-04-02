@@ -111,6 +111,7 @@ function onWindowResize(){
 	hudCamera.updateProjectionMatrix();
 	/* set flag for HUD update */
 	OK_hud = false;
+	helpReady = false;
 	/* reset renderer */
     renderer.setSize( window.innerWidth, window.innerHeight );
 

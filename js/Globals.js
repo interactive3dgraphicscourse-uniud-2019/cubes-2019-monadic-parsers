@@ -14,6 +14,7 @@ var helpReady = false;               // true if help was loaded (async)
 var HUD_obj = new THREE.Object3D();  // HUD 3D object 
 var HUD_content = [];                // object componsing the HUD
 let TextScaleFactor = 1.5;           // text scale factor for HUD and help
+let lineOffset = 3*TextScaleFactor/1.5; // line offset to divide HUD elements vertically
 
 /*--- clock and delta-time (used to compute the time duration of each frame) ---*/
 var clock = new THREE.Clock();
