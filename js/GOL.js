@@ -1,6 +1,9 @@
 /**
  * 3D Game of Life 
- * TODO fai in modo di separare nettamente le azioni sul menu e sulla scena principale usando i flag (menuMode) 
+ * TODO refactoring
+ *      size bug
+ *      resizing dinamico
+ *      volpi
  * (per i bottoni)
  */
 
@@ -103,27 +106,30 @@ function inputReader(e) {
 
 	if (e.code == "Enter") {
 		/* A: update game matrix manually */
-		//console.log("Using:");
-		//logStatus();
 		game.update();
 	} else if (e.code == "KeyR") {
 		/* R: reset game matrix */
 		reset();
 	} else if (e.code == "Period") {
 		/* Reset camera position to default */
-		alignToCamera();
+		if(!exploding)
+			alignToCamera();
 	} else if (e.code == "ArrowRight") {
 		/* R: reset game matrix */
-		rotateRight45();
+		if(!exploding)
+			rotateRight45();
 	} else if (e.code == "ArrowLeft") {
 		/* R: reset game matrix */
-		rotateLeft45();
+		if(!exploding)
+			rotateLeft45();
 	} else if (e.code == "ArrowUp") {
 		/* R: reset game matrix */
-		rotateUp45();
+		if(!exploding)
+			rotateUp45();
 	} else if (e.code == "ArrowDown") {
 		/* R: reset game matrix */
-		rotateDown45();
+		if(!exploding)
+			rotateDown45();
 	} else if (e.code == "KeyE") {
 		/* explode */
 		explosion();
@@ -136,8 +142,41 @@ function inputReader(e) {
 	} else if (e.code == "KeyA") {
 		/* enable auto update */
 		setAuto();
-	} 
+	} else if (e.code == "KeyP") {
+		/* change camera */
+		changeCamera();
+	}
 
+}
+
+let pos_per = new THREE.Vector3(); 
+let rot_per = new THREE.Vector3();
+let pos_orto = new THREE.Vector3();
+let rot_orto = new THREE.Vector3();
+let zoom_orto = new THREE.Vector3();
+
+function changeCamera(){
+
+	if (camera.isPerspectiveCamera){
+		pos_per = camera.position.clone(); 
+		rot_per = camera.rotation.clone();
+		camera = new THREE.OrthographicCamera(-window.innerWidth/2 , window.innerWidth / 2, window.innerHeight / 2, -window.innerHeight / 2, -30000, 30000);
+		camera.position.set(pos_orto.x,pos_orto.y,pos_orto.z);
+		camera.rotation.set(rot_orto.x,rot_orto.y,rot_orto.z);
+		camera.zoom = zoom_orto;
+	} else {
+		pos_orto = camera.position.clone(); 
+		rot_orto = camera.rotation.clone();
+		zoom_orto = camera.zoom;
+		camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+		camera.position.set(pos_per.x,pos_per.y,pos_per.z);
+		camera.rotation.set(rot_per.x,rot_per.y,rot_per.z);
+	}
+	camera.updateProjectionMatrix();
+	/* update controls */
+	controls = new THREE.OrbitControls(camera, renderer.domElement);
+	controls.enableKeys = false;
+	
 }
 
 function showHUD(){
@@ -205,6 +244,14 @@ function Init() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	renderer.setPixelRatio(1)
 
+	pos_per = defaultPosition.clone(); 
+	rot_per = camera.rotation.clone();
+	pos_orto = defaultPosition.clone(); 
+	rot_orto = camera.rotation.clone();
+	zoom_orto = 10;
+
+	
+
 	/* controls */
 	controls = new THREE.OrbitControls(camera, renderer.domElement);
 	controls.enableKeys = false;
@@ -242,30 +289,29 @@ function Init() {
 		Set_auto: function(){  setAuto(); },
 		Reset: function() { reset(); },
 		Toggle_Hud:  function() { showHUD(); },
-		Toggle_Help:  function() { showHelp(); }
-
-		
+		View_Help:  function() { showHelp(); },
+		Switch_camera: function() { changeCamera(); }   
 	};
 
 	var sizeFolder = gui.addFolder('Game matrix dimensions');
 	var lifeFolder = gui.addFolder('Options for life and death');
 
-	sizeFolder.add( effectController, 'width', 1, 30,  1 ).onChange(function(){ width = effectController.width });
-	sizeFolder.add( effectController, 'height', 1, 30,  1 ).onChange(function(){ height = effectController.height });
-	sizeFolder.add( effectController, 'depth', 1, 30, 1 ).onChange(function(){ depth = effectController.depth });
-	lifeFolder.add( effectController, 'Stay_alive_min', 0, 26, 1 ).onChange(function(){ AAmin = effectController.Stay_alive_min });
-	lifeFolder.add( effectController, 'Stay_alive_max', 0, 26, 1 ).onChange(function(){ AAmax = effectController.Stay_alive_max });
-	lifeFolder.add( effectController, 'Become_alive_min', 0, 26, 1 ).onChange(function(){ DAmin = effectController.Become_alive_min });
-	lifeFolder.add( effectController, 'Become_alive_max', 0, 26, 1 ).onChange(function(){ DAmax = effectController.Become_alive_max });
-	gui.add( effectController, 'Auto_step_time', 0.050, 2.00, 0.050 ).onChange(function(){ stepTime = effectController.Auto_step_time });
+	sizeFolder.add( effectController, 'width', 1, 30,  1 ).onChange(function(){ width = effectController.width; reset(); });
+	sizeFolder.add( effectController, 'height', 1, 30,  1 ).onChange(function(){ height = effectController.height; reset(); });
+	sizeFolder.add( effectController, 'depth', 1, 30, 1 ).onChange(function(){ depth = effectController.depth; reset(); });
+	lifeFolder.add( effectController, 'Stay_alive_min', 0, 26, 1 ).onChange(function(){ AAmin = effectController.Stay_alive_min; reset(); });
+	lifeFolder.add( effectController, 'Stay_alive_max', 0, 26, 1 ).onChange(function(){ AAmax = effectController.Stay_alive_max; reset(); });
+	lifeFolder.add( effectController, 'Become_alive_min', 0, 26, 1 ).onChange(function(){ DAmin = effectController.Become_alive_min; reset(); });
+	lifeFolder.add( effectController, 'Become_alive_max', 0, 26, 1 ).onChange(function(){ DAmax = effectController.Become_alive_max; reset(); });
+	gui.add( effectController, 'Auto_step_time', 0.050, 2.00, 0.050 ).onChange(function(){ stepTime = effectController.Auto_step_time; reset(); });
 	var miscFolder = gui.addFolder('Miscellaneous');
 	miscFolder.add(effectController, 'Explode');
 	miscFolder.add(effectController, 'Set_auto');
 	miscFolder.add(effectController, 'Reset');
 	miscFolder.add(effectController, 'Toggle_Hud');
-	miscFolder.add(effectController, 'Toggle_Help');
-	var info1 = gui.addFolder('Press H to view keyboard shortcuts');
-	var info2 = gui.addFolder('Press R to apply changes and reset');
+	miscFolder.add(effectController, 'View_Help');
+	miscFolder.add(effectController, 'Switch_camera');
+	//var info1 = gui.addFolder('Press H to view keyboard shortcuts');
 }
 
 /* RENDERING FUNCTIONS */

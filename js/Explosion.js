@@ -28,6 +28,11 @@ function Explosion(game, scene){
      */
     this.setMovementInfoOfCubes = function () {
         for(let i = 0; i<this.cubes.length; i++){
+            /* compute global positions and rotations */
+            this.cubes[i].matrix = this.cubes[i].matrixWorld.clone();
+            this.cubes[i].position.setFromMatrixPosition(this.cubes[i].matrix);
+            this.cubes[i].rotation.setFromRotationMatrix(this.cubes[i].matrix);
+            
             /* compute center to cube vector */
             let VIni = this.cubes[i].position.clone(); 
             VIni.normalize();

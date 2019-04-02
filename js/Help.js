@@ -1,4 +1,3 @@
-// https://www.evermade.fi/pure-three-js-hud/
 /*
 * 
 h open help
@@ -23,11 +22,13 @@ function Help() {
    if (!helpReady) {
       try {
 
+         HelpObj.position.z = 10;
+
          let baseHeight = window.innerHeight * 0.01;
          let baseWidth = window.innerWidth * 0.01
 
-         var keys = ["H:", "X:", "", "R:", "E:", "A:", "Enter:", "", "Arrows:", "(.):","", "--- HELP ---"];
-         var commands = ["show help", "toggle HUD", "", "reset game", "explode game", "auto update", "single step", "", "rotate game", "align camera","", ""];
+         var keys = ["H:", "X:", "", "R:", "E:", "A:", "Enter:", "", "P:", "Arrows:", "(.):","", "--- HELP ---"];
+         var commands = ["show help", "toggle HUD", "", "reset game", "explode game", "auto update", "single step", "", "change camera", "rotate game", "align camera","", ""];
 
          var verticalPos = -(keys.length-1)*baseHeight * 3/2;
 
@@ -35,6 +36,7 @@ function Help() {
          var maxlen = 0;
 
          for (let i = 0; i < keys.length; i++) {
+            /* BUG: size is not exact */
             let str = prepareString((keys[i] + " " + commands[i]).toUpperCase());
             
             str.object.position.y += verticalPos;
@@ -50,14 +52,14 @@ function Help() {
          var geometry = new THREE.PlaneGeometry( rectX, rectY, 0 );
          var material = new THREE.MeshBasicMaterial( {color: 0x000000, side: THREE.DoubleSide, transparent: true, opacity: 0.7} );
          var HelpBG   = new THREE.Mesh(geometry, material);
-
+         
          HelpObj.add(HelpBG);
 
          helpReady = true;
          HelpObj.visible = false;
 
       } catch(e){
-         console.log(e)
+         //console.log(e)
       }
    }
 };

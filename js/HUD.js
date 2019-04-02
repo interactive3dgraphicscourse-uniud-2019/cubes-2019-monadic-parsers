@@ -26,6 +26,7 @@ function VoxelHUD() {
 
          HUD_obj.children = [];
          HUD_content = [];
+         HUD_obj.position.z = 10;
 
 
          let baseHeight = window.innerHeight * 0.01;
@@ -85,54 +86,5 @@ function VoxelHUD() {
    }
 
 }
-
-
-
-
-
-
-
-
-// https://www.evermade.fi/pure-three-js-hud/
-
-/*
-function HUD() {
-   let scalefactor = 1;
-   var hudCanvas = document.createElement('canvas');
-   hudCanvas.width = window.innerWidth*scalefactor;
-   hudCanvas.height = window.innerHeight*scalefactor;
-   hudCanvas.getContext('2d').scale(scalefactor,scalefactor);
-   var hudBitmap = hudCanvas.getContext('2d');
-
-   let fontsize = window.innerHeight * 0.025;
-   hudBitmap.font = "Bold "+ fontsize + "px Arial";
-   hudBitmap.textAlign = 'right';
-   hudBitmap.fillStyle = "rgba(245,245,245,1)";
-   let verticalPos = 0.05;
-   hudBitmap.fillText("Press P for options", window.innerWidth*0.97, window.innerHeight*verticalPos);
-   verticalPos += 0.03;
-   hudBitmap.fillText("Press H for help", window.innerWidth*0.97, window.innerHeight*verticalPos);
-
-   verticalPos = 0.05;
-   hudBitmap.textAlign = 'center';
-   hudBitmap.fillText("height: " + height + ", width: " + width + ", depth: " + depth, window.innerWidth*0.5, window.innerHeight*verticalPos);
-   verticalPos += 0.03;
-   hudBitmap.fillText("Stay alive: [" + AAmin + ".." + AAmax + "]  Become alive: [" + DAmin + ".." + DAmax + "]", window.innerWidth*0.5, window.innerHeight*verticalPos);
-
-   verticalPos = 0.05;
-   hudBitmap.textAlign = 'left';
-   hudBitmap.fillText("FPS: " + frameCount, window.innerWidth*0.03, window.innerHeight*verticalPos);
-
-
-   var hudTexture = new THREE.Texture(hudCanvas)
-   hudTexture.needsUpdate = true;
-   var material = new THREE.MeshBasicMaterial({ map: hudTexture, side: THREE.DoubleSide });
-   material.transparent = true;
-
-   var planeGeometry = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
-   var plane = new THREE.Mesh(planeGeometry, material);
-   return plane;
-};
-*/
 
 

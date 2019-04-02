@@ -63,6 +63,7 @@ function Terrain(filepath) {
 
 
    let terrainObject = new THREE.Object3D();
+   terrainObject.position.set(1.5,-3,2);
    let scalingFactor = 4;
    let cubeOpacity = 0.2;
    let cubeColor = 0xCCF1F4;
