@@ -56,7 +56,11 @@ function prepareGUI(){
 	miscFolder.add(effectController, 'Reset');
 	miscFolder.add(effectController, 'Toggle_Hud');
 	miscFolder.add(effectController, 'Switch_camera');
+<<<<<<< HEAD
 	miscFolder.add(effectController, 'HUD_scale', 0.2, 2.8, 0.2).onChange(function () { TextScaleFactor = effectController.HUD_scale; OK_hud=false; helpReady=false;});
+=======
+	miscFolder.add(effectController, 'HUD_scale', 0.2, 10, 0.2).onChange(function () { TextScaleFactor = effectController.HUD_scale; OK_hud=false; helpReady=false;});
+>>>>>>> 514be1124d2ac5708002a32becba122b6c7c9d5b
 	/* help button */
 	gui.add(effectController, 'Help');
 }
