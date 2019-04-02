@@ -1,12 +1,13 @@
-var globalFont;
-var HUD_obj = new THREE.Object3D();
-var HUD_content = [];
-var material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
-let TextScaleFactor = 1.5;
 
+
+/**
+ * updares the fps counter (to be used in the rendering loop)
+ */
 function UpdateFPS() {
-   if (OK_hud) {
+   if (OK_hud) { // HUD must be loaded
+      /* prepare text */
       let FPS = prepareString("FPS: " + frameCount);
+      /* positioning */
       applyTransformationToChars(FPS, function(x) { x.rotation.x += Math.PI/8; x.rotation.y += Math.PI/8 });
       FPS.object.scale.set(TextScaleFactor,TextScaleFactor,TextScaleFactor);
       let baseHeight = window.innerHeight * 0.01;
@@ -14,24 +15,31 @@ function UpdateFPS() {
       offFPS = (TextScaleFactor*FPS.length / 2);
       FPS.object.position.x += -baseWidth * 48 + offFPS;
       FPS.object.position.y += baseHeight * 45.5;
+      /* update HUD object (FPS counter is in position 2)*/   
       HUD_obj.remove(HUD_content[2].object);
       HUD_content[2] = FPS;
       HUD_obj.add(HUD_content[2].object);
    }
 }
 
+/**
+ * prepares or updates the HUD (to be used in the rendering loop)
+ */
 function VoxelHUD() {
-   if (!OK_hud) {
+   if (!OK_hud) { // HUD must not be loaded (change this flag for updates)
       try {
 
+         /* reset HUD objects */
          HUD_obj.children = [];
          HUD_content = [];
+         /* for ortographic camera */
          HUD_obj.position.z = 10;
 
-
+         /* use window variables to make interface adaptive to real space */
          let baseHeight = window.innerHeight * 0.01;
          let baseWidth = window.innerWidth * 0.01
 
+         /* prepare HUD objects texts */
          let OptP = prepareString("Press P for options".toUpperCase());
          applyTransformationToChars(OptP, function(x) { x.rotation.x += Math.PI/8; x.rotation.y += Math.PI/8 });
          let HelpH = prepareString("Press H for Help".toUpperCase());
@@ -43,17 +51,18 @@ function VoxelHUD() {
          let FPS = prepareString("FPS: " + frameCount);
          applyTransformationToChars(FPS, function(x) { x.rotation.x += Math.PI/8; x.rotation.y += Math.PI/8 });
 
+         /* scaling */
          offOpt = TextScaleFactor*(OptP.length / 2);
          //if((baseWidth * 45 + offOpt) > window.innerWidth/2){
          //   TextScaleFactor = 1.5;
          //}
-
          OptP.object.scale.set(TextScaleFactor,TextScaleFactor,TextScaleFactor);
          HelpH.object.scale.set(TextScaleFactor,TextScaleFactor,TextScaleFactor);
          dims.object.scale.set(TextScaleFactor,TextScaleFactor,TextScaleFactor);
          options.object.scale.set(TextScaleFactor,TextScaleFactor,TextScaleFactor);
          FPS.object.scale.set(TextScaleFactor,TextScaleFactor,TextScaleFactor);
 
+         /* positioning */
          offOpt = TextScaleFactor*(OptP.length / 2);
          OptP.object.position.x += baseWidth * 45 - offOpt;
          OptP.object.position.y += baseHeight * 47;
@@ -70,18 +79,19 @@ function VoxelHUD() {
          FPS.object.position.x += -baseWidth * 48 + offFPS;
          FPS.object.position.y += baseHeight * 45.5;
 
+         /* add to HUD objects */
          //HUD_content.push(OptP);
          //HUD_content.push(HelpH);
          HUD_content.push(dims);
          HUD_content.push(options);
          HUD_content.push(FPS);
-         //HUD_content.push(FPS); //5
+
          for (let i = 0; i < HUD_content.length; i++) {
             HUD_obj.add(HUD_content[i].object);
          }
-         OK_hud = true;
+         OK_hud = true; // set flag to signal the success of async loading
       } catch{
-
+         // ignore errors due to resource loading 
       }
    }
 

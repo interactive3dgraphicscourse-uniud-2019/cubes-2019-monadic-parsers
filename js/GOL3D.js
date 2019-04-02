@@ -23,7 +23,6 @@ function GOL3D(height, width, depth, AAmin, AAmax, DAmin, DAmax) {
     /* METHODS */
 
     /* CREATION and DELATION */
-
     this.setOptions =
         function (AAmin, AAmax, DAmin, DAmax) {
             this.AAmin = AAmin;
@@ -48,7 +47,6 @@ function GOL3D(height, width, depth, AAmin, AAmax, DAmin, DAmax) {
             scene.remove(this.pivot);	  
             this.update = function(){ return };
         };
-
 
     /**
     * initialize the game 3D matrix
@@ -89,11 +87,6 @@ function GOL3D(height, width, depth, AAmin, AAmax, DAmin, DAmax) {
             }
 
             this.updateCubesColor();
-
-            //this.pivot.matrixAutoUpdate = false;
-            /* reset camera position and compute new default */
-            //maxZ = depth/2; // shift camera of half the depth of the cube matrix
-            //defaultPosition = new THREE.Vector3(0,0,maxZ + 20);
 
         };
 
@@ -254,7 +247,11 @@ function GOL3D(height, width, depth, AAmin, AAmax, DAmin, DAmax) {
         };
 
 
-
+    /**
+     * rotate this game object on a given axis of a given angle
+     * @param axsis
+     * @param angle
+     */
     this.rotateAxis =
         function (axis, angle) {
             m = new THREE.Matrix4();
@@ -263,6 +260,10 @@ function GOL3D(height, width, depth, AAmin, AAmax, DAmin, DAmax) {
             this.pivot.rotation.setFromRotationMatrix(this.pivot.matrix);
         };
 
+    /**
+     * sets this game object rotations
+     * @target a Vector3D containing the wanted rotation values
+     */
     this.setRotation =
         function (target) {
             this.pivot.rotation.set(target.x, target.y, target.z);
@@ -270,7 +271,7 @@ function GOL3D(height, width, depth, AAmin, AAmax, DAmin, DAmax) {
 
     /* FIELDS */
 
-    /* central pivot in 0,0,0 */
+    /* center pivot in 0,0,0 */
     this.pivot = new THREE.Object3D();
 
     /* X,Y,Z local axses */
@@ -297,11 +298,11 @@ function GOL3D(height, width, depth, AAmin, AAmax, DAmin, DAmax) {
 
     /* material color (HSL) properties*/
     this.opacity = 0.8;
-    this.colorLife = 110; //green
-    this.colorNoNeigh = 220; //blue
-    this.colorBarelyNoNeigh = 180; //sky blue
-    this.colorAllNeigh = 0; //red
-    this.colorBarelyTooNeigh = 60; //yellow
+    this.colorLife = 110;          // green
+    this.colorNoNeigh = 220;       // blue
+    this.colorBarelyNoNeigh = 180; // sky blue
+    this.colorAllNeigh = 0;        // red
+    this.colorBarelyTooNeigh = 60; // yellow
     this.colorSaturation = 0.60;
     this.colorLuminosity = 0.50;
 
@@ -319,9 +320,5 @@ function GOL3D(height, width, depth, AAmin, AAmax, DAmin, DAmax) {
 
     /*shortcut for rotation*/
     this.rotation = this.pivot.rotation;
-
-
-
-    //this.matrixAutoUpdate = false;
 
 };

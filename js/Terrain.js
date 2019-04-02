@@ -1,4 +1,3 @@
-var currentTerrainCubes = [];
 
 /**
  * Class used to represent the terrain underlying the cube matrix
@@ -17,10 +16,17 @@ function Terrain(filepath) {
 
          for (let i = 0; i < imgsize; i++) {
             for (let j = 0; j < imgsize; j++) {
+               /* read height */
                let value = data[i * imgsize + j];
                let scaledValue = THREE.Math.mapLinear(value, 0, 255, 1, 30.0/scalingFactor);
+               /* prepare voxel */
                let cube = new THREE.Mesh(cubeG, cubeM);
-               cube.position.set(i * scalingFactor - imgsize/2 * scalingFactor, -imgsize/2 * scalingFactor + scaledValue * scalingFactor - imgsize / 2, j * scalingFactor - imgsize/2*scalingFactor);
+               cube.position.set(
+                  i * scalingFactor - imgsize/2 * scalingFactor, 
+                  -imgsize/2 * scalingFactor + scaledValue * scalingFactor - imgsize / 2, 
+                  j * scalingFactor - imgsize/2*scalingFactor
+               );
+               /* add to terrain objects */
                currentTerrainCubes.push(cube);
                terrainObject.add(cube);
             }
@@ -29,9 +35,10 @@ function Terrain(filepath) {
       };
 
    /**
-    * populates the field data with the colors of the png image
+    * populates the fields data with the colors of the png image
     */
    function getHeightData() {
+
       var canvas = document.createElement('canvas');
       canvas.width = img.width;
       canvas.height = img.height;
@@ -56,11 +63,11 @@ function Terrain(filepath) {
          data[j] = all / 3;
          j++;
       }
+
    }
 
    this.addToScene = function (scene) { scene.add(terrainObject); };
    this.removeFromScene = function (scene) { scene.remove(terrainObject); };
-
 
    let terrainObject = new THREE.Object3D();
    terrainObject.position.set(1.5,-3,2);
@@ -70,6 +77,7 @@ function Terrain(filepath) {
    let imgsize;
    let img = new Image();
    let data = [];
+   /* asinc loading of png heightmap */
    img.onload = function () {
       getHeightData(1);
       initializeTerrain();

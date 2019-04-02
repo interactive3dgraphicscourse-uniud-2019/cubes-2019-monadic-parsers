@@ -29,7 +29,7 @@ function rotationRender() {
 }
 
 /**
- * gradually rotates the game object of the given angles
+ * gradually rotates the game object of the given angle on a given axis
  */
 function rotationAxisRender() {
 	var dlt = animationClock.getDelta();
