@@ -35,7 +35,7 @@ function Help() {
 
          /* add semi-ransparent black background plane */
          rectX = maxlen + baseWidth*2;
-         rectY = (2+keys.length) *baseHeight * lineOffset * 3/2;
+         rectY = (2+keys.length) * baseHeight * lineOffset ;
          
          var geometry = new THREE.PlaneGeometry( rectX, rectY, 0 );
          var material = new THREE.MeshBasicMaterial( {color: 0x000000, side: THREE.DoubleSide, transparent: true, opacity: 0.7} );
