@@ -1,10 +1,5 @@
 /**
  * 3D Game of Life 
- * TODO refactoring
- *      size bug
- *      resizing dinamico
- *      volpi
- * (per i bottoni)
  */
 
 /**
@@ -38,7 +33,8 @@ function prepareGUI(){
 		Reset: function () { reset(); },
 		Toggle_Hud: function () { showHUD(); },
 		Help: function () { showHelp(); },
-		Switch_camera: function () { changeCamera(); }
+		Switch_camera: function () { changeCamera(); },
+		HUD_scale:TextScaleFactor
 	};
 	/* size options */
 	var sizeFolder = gui.addFolder('Game matrix dimensions');
@@ -60,6 +56,7 @@ function prepareGUI(){
 	miscFolder.add(effectController, 'Reset');
 	miscFolder.add(effectController, 'Toggle_Hud');
 	miscFolder.add(effectController, 'Switch_camera');
+	miscFolder.add(effectController, 'HUD_scale', 0.2, 10, 0.2).onChange(function () { TextScaleFactor = effectController.HUD_scale; OK_hud=false; helpReady=false;});
 	/* help button */
 	gui.add(effectController, 'Help');
 }
@@ -108,6 +105,7 @@ function Init() {
 	/* add HUD and Help object to the scene */
 	hudScene.add(HUD_obj);
 	hudScene.add(HelpObj);
+	HelpObj.visible = false;
 
 	/* prepare dat GUI */
 	prepareGUI();

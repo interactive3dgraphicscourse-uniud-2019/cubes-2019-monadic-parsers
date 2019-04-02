@@ -6,7 +6,7 @@ var helpScene;
 /*--- HUD AND HELP ---*/
 var hudEnabled = true; // flag for HUD visualization
 var hudCounter = 1.;   // wait a second for FPS computation
-var OK_hud = false;    // true if hud was loaded (async)
+var OK_hud = false;    // true if hud was loaded (async) 
 var frameCount = 0;    // Frame count for FPS
 var helpEnabled = false;             // true if the help message should be shown on screen
 var HelpObj = new THREE.Object3D();  // help 3D object
@@ -58,8 +58,8 @@ var rotationAnimation = false;
 var rotationAxisAnimation = false;
 
 /*--- explosions ---*/
-var exploding = false;
-var ExpolsionObject;
+var exploding = false;        // states if the explosion animation was triggered
+var ExpolsionObject;          // object managing the cubes during the explosion
 var currentTerrainCubes = []; // cubes of the terrain (necessary to add them to the explosion animation)
 
 /*--- multiple camera state management ---*/

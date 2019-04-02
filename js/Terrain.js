@@ -1,4 +1,3 @@
-
 /**
  * Class used to represent the terrain underlying the cube matrix
  * @param {*} filepath path to heightmap image in png format
