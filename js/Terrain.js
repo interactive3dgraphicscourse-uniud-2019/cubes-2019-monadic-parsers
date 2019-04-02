@@ -76,7 +76,7 @@ function Terrain(filepath) {
    let imgsize;
    let img = new Image();
    let data = [];
-   /* asinc loading of png heightmap */
+   /* async loading of png heightmap */
    img.onload = function () {
       getHeightData(1);
       initializeTerrain();

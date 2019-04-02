@@ -1,6 +1,6 @@
 /**
  * async load of help message box
- * uses global variable helpReady to know if it is necessari to reload it
+ * uses global variable helpReady to know if it is necessary to reload it
  * (to be used in the rendering loop)
  */
 function Help() {
@@ -33,7 +33,7 @@ function Help() {
             HelpObj.add(str.object);
          }
 
-         /* add semi-ransparent black background plane */
+         /* add semi-transparent black background plane */
          rectX = maxlen + baseWidth*2;
          rectY = (2+keys.length) * baseHeight * lineOffset ;
          

@@ -1,5 +1,5 @@
 /*
-	Remeber to:
+	Remember to:
 	1- enable camera rotation with OrbitControls
 	2- enable normalOperations
 	3- disable the animation flag 

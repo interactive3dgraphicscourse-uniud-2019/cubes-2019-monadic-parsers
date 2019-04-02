@@ -1,5 +1,5 @@
 /**
- * updares the fps counter (to be used in the rendering loop)
+ * updates the fps counter (to be used in the rendering loop)
  */
 function UpdateFPS() {
    if (OK_hud) { // HUD must be loaded
