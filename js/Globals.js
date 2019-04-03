@@ -37,7 +37,7 @@ var defaultPosition = new THREE.Vector3(0, 0, 20);
 
 /* other variables to manage game's behaviour (settings) ---*/
 var auto = false;      // auto update of GM flag
-var stepTime = 0.250;  // auto update delta time (in ms)
+var stepTime = 0.250;  // auto update delta time (in s)
 var step = stepTime;   // variable measuring the remaining time before an auto update
 
 /*--- active mode ---*/

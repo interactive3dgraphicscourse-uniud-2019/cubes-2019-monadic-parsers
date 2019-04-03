@@ -50,6 +50,7 @@ function inputReader(e) {
 	} else if (e.code == "KeyH") {
 		/* toggle help */
 		showHelp();
+		e.stopPropagation();
 	} else if (e.code == "KeyA") {
 		/* enable auto update */
 		setAuto();
