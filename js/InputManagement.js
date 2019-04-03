@@ -15,7 +15,7 @@ function setAuto() {
 * @param e (event)
 */
 function inputReader(e) {
-	if (e.code == "Enter") {
+	if (e.code == "KeyN") {
 		/* A: update game matrix manually */
 		game.update();
 	} else if (e.code == "KeyR") {
@@ -124,12 +124,19 @@ function onWindowResize(){
  */
 function showHUD(){
 	hudEnabled = !hudEnabled;
+	if (!hudEnabled) {
+		helpEnabled = false;
+		HelpObj.visible = false;
+	}
 }
 
 /**
  * sets flags to show help
  */
 function showHelp(){
+	if (!hudEnabled && !helpEnabled) {
+		hudEnabled = true;
+	}
 	helpEnabled = !helpEnabled;
 	HelpObj.visible = !HelpObj.visible;
 }

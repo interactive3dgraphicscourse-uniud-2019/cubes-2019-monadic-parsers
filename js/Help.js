@@ -15,7 +15,7 @@ function Help() {
          let baseWidth = window.innerWidth * 0.01
 
          /* help messages (reverse order)*/
-         var keys = ["H:", "X:", "", "R:", "E:", "A:", "Enter:", "", "P:", "Arrows:", "(.):","", "--- HELP ---"];
+         var keys = ["H:", "X:", "", "R:", "E:", "A:", "N:", "", "P:", "Arrows:", "(.):","", "--- HELP ---"];
          var commands = ["show help", "toggle HUD", "", "reset game", "explode game", "auto update", "single step", "", "change camera", "rotate game", "align camera","", ""];
 
          /* center message vertically */

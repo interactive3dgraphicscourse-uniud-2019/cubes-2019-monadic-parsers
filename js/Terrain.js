@@ -6,7 +6,7 @@ function Terrain(filepath) {
 
 
    /**
-    * initializes the terrain
+    * creates the terrain of a fixed dimension using the data array information containing the heightmap values
     */
    initializeTerrain =
       function () {
@@ -70,7 +70,7 @@ function Terrain(filepath) {
 
    let terrainObject = new THREE.Object3D();
    terrainObject.position.set(1.5,-3,2);
-   let scalingFactor = 4;
+   let scalingFactor = 4; //use 4 for heightmap 15x15 and 2 for heightmap 30x30
    let cubeOpacity = 0.2;
    let cubeColor = 0xCCF1F4;
    let imgsize;
@@ -78,7 +78,7 @@ function Terrain(filepath) {
    let data = [];
    /* async loading of png heightmap */
    img.onload = function () {
-      getHeightData(1);
+      getHeightData();
       initializeTerrain();
    }
    img.src = filepath;
