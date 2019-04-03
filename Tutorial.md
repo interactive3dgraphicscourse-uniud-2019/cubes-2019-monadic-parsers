@@ -49,7 +49,7 @@ The rules of the game of life are very simple. A cell is considered alive in the
 
 ### Game execution
 
-The game can be executed manually step-by-step using the "Enter" key or the "NEXT STEP" button. It is also
+The game can be executed manually step-by-step using the "N" key or the "NEXT STEP" button. It is also
 possible to automatically pass to the next iteration by pressing "A" or the "AUTO UPDATE" button. The time interval between updates can be modified with the relative slider.
 
 Initial state
