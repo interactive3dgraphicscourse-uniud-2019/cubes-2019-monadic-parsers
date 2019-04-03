@@ -47,7 +47,7 @@ function prepareGUI(){
 	gui.add(effectController, 'width').name("Width").min(1.).max(30.0).step(1.).onChange(function () { width = effectController.width; reset(); });
 	gui.add(effectController, 'height').name("Height").min(1.).max(30.0).step(1.).onChange(function () { height = effectController.height; reset(); });
 	gui.add(effectController, 'depth').name("Depth").min(1.).max(30.0).step(1.).onChange(function () { depth = effectController.depth; reset(); });
-	gui.add(effectController, 'Spawn_probability', 0., 1., 0.005).name("Change auto update time (ns)").min(0.).max(1.0).step(0.005).onChange(function () { spawnProbability = effectController.Spawn_probability; });
+	gui.add(effectController, 'Spawn_probability', 0., 1., 0.005).name("Random spawn probability").min(0.).max(1.0).step(0.005).onChange(function () { spawnProbability = effectController.Spawn_probability; });
 	gui.add(effectController, 'Reset').name("Generate new game");
 	/* game option */
 	//var lifeFolder = gui.addFolder('Options for life and death');
