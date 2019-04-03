@@ -115,7 +115,7 @@ Inoltre, è stato scelto di utilizzare lo spazio colori HSL per indicare i color
 Viene proposta una legenda dei comandi da dare al sistema per effettuare determinate azioni, riportate poi nell'help del programma.
 * ← → ↑ ↓ : rotazione della matrice di gioco di 45 gradi nella direzione indicata
 * . (punto) : allineamento della martice di gioco con la camera
-* Enter : fare avanzare il gioco di un passo
+* N : fare avanzare il gioco di un passo
 * A : il gioco avanza automaticamente secondo l'impostazione di tempo inserita
 * P : apre il menù delle opzioni
 * H : apre un aiuto che mostra tutti i comando
@@ -183,6 +183,7 @@ Dato che si è deciso di rimuovere il menù, il pulsante "P" verrà utilizzato p
 
 #### 03/04/2019
 * Miglioramento del menù delle opzioni;
+* Testing;
 
 ## Bug e soluzioni
 #### Somma in Javascript
