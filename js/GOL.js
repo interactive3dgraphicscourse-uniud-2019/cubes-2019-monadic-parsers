@@ -15,12 +15,22 @@ function logStatus() {
 	console.log("DAmax = " + DAmax);
 }
 
-document.addEventListener('PaperGUIReady', function(e) {
-	prepareGUI();
-});
+/**
+* Loads the paperGUI (async)
+*/
+function checkIfPaperGUIReady(){
+	if(!paperGUI_OK){	
+		try{
+			prepareGUI();
+		} catch {
 
+		}
+	}
+}
+
+var paperGUI_OK=false;
 function prepareGUI(){
-	var gui = new PaperGUI();
+	gui = new PaperGUI();
 	
 	/* elements */
 	effectController = {
@@ -70,6 +80,8 @@ function prepareGUI(){
 	gui.add(effectController, 'Switch_camera').name("Change camera type");
 	gui.add(effectController, 'Explode').name("Explosion animation");
 	
+
+	paperGUI_OK=true;
 }
 
 /* initialization: executed at page load */
@@ -127,6 +139,7 @@ var menuCamera;
 /* rendering loop */
 function Render() {
 	requestAnimationFrame(Render);
+    checkIfPaperGUIReady(); // avoids problems with browser compatibility
 	delta = clock.getDelta(); // compute frame time
 	Help();           // async load of help msg
 	VoxelHUD();              // async load of HUD
