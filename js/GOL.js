@@ -15,8 +15,12 @@ function logStatus() {
 	console.log("DAmax = " + DAmax);
 }
 
+document.addEventListener('PaperGUIReady', function(e) {
+	prepareGUI();
+});
+
 function prepareGUI(){
-	var gui = new dat.GUI({ hideable: false });
+	var gui = new PaperGUI({hidable:false});//({ hideable: false });
 
 	/* elements */
 	effectController = {
@@ -38,34 +42,36 @@ function prepareGUI(){
 		Spawn_probability:spawnProbability
 	};
 	/* size options */
-	var sizeFolder = gui.addFolder('Game matrix dimensions');
-	sizeFolder.add(effectController, 'width', 1, 30, 1).onChange(function () { width = effectController.width; reset(); });
-	sizeFolder.add(effectController, 'height', 1, 30, 1).onChange(function () { height = effectController.height; reset(); });
-	sizeFolder.add(effectController, 'depth', 1, 30, 1).onChange(function () { depth = effectController.depth; reset(); });
+	//var sizeFolder = gui.addFolder('Game matrix dimensions');
+	gui.add(effectController, 'Help');
+	gui.add(effectController, 'width').name("Width").min(1.).max(30.0).step(1.).onChange(function () { width = effectController.width; reset(); });
+	gui.add(effectController, 'height').name("Height").min(1.).max(30.0).step(1.).onChange(function () { height = effectController.height; reset(); });
+	gui.add(effectController, 'depth').name("Depth").min(1.).max(30.0).step(1.).onChange(function () { depth = effectController.depth; reset(); });
+	gui.add(effectController, 'Spawn_probability', 0., 1., 0.005).name("Change auto update time (ns)").min(0.).max(1.0).step(0.005).onChange(function () { spawnProbability = effectController.Spawn_probability; });
+	gui.add(effectController, 'Reset').name("Generate new game");
 	/* game option */
-	var lifeFolder = gui.addFolder('Options for life and death');
-	lifeFolder.add(effectController, 'Stay_alive_min', 0, 26, 1).onChange(function () { AAmin = effectController.Stay_alive_min; reset(); });
-	lifeFolder.add(effectController, 'Stay_alive_max', 0, 26, 1).onChange(function () { AAmax = effectController.Stay_alive_max; reset(); });
-	lifeFolder.add(effectController, 'Become_alive_min', 0, 26, 1).onChange(function () { DAmin = effectController.Become_alive_min; reset(); });
-	lifeFolder.add(effectController, 'Become_alive_max', 0, 26, 1).onChange(function () { DAmax = effectController.Become_alive_max; reset(); });
+	//var lifeFolder = gui.addFolder('Options for life and death');
+	gui.add(effectController, 'Stay_alive_min').name("Stay-alive minimum").min(0.).max(26.0).step(1.).onChange(function () { AAmin = effectController.Stay_alive_min; reset(); });
+	gui.add(effectController, 'Stay_alive_max').name("Stay-alive maximum").min(0.).max(26.0).step(1.).onChange(function () { AAmax = effectController.Stay_alive_max; reset(); });
+	gui.add(effectController, 'Become_alive_min').name("Become-alive minimum").min(0.).max(26.0).step(1.).onChange(function () { DAmin = effectController.Become_alive_min; reset(); });
+	gui.add(effectController, 'Become_alive_max').name("Become-alive maximum").min(0.).max(26.0).step(1.).onChange(function () { DAmax = effectController.Become_alive_max; reset(); });
 	/* auto time */
-	gui.add(effectController, 'Auto_step_time', 0.050, 2.00, 0.050).onChange(function () { stepTime = effectController.Auto_step_time; });
-	gui.add(effectController, 'Spawn_probability', 0., 1., 0.005).onChange(function () { spawnProbability = effectController.Spawn_probability; });
+	gui.add(effectController, 'Set_auto').name("auto update");
+	gui.add(effectController, 'Auto_step_time').name("Change auto update time (ns)").min(0.05).max(2.0).step(0.05).onChange(function () { stepTime = effectController.Auto_step_time; });
 	/* misc */
-	var miscFolder = gui.addFolder('Miscellaneous');
-	miscFolder.add(effectController, 'Explode');
-	miscFolder.add(effectController, 'Set_auto');
-	miscFolder.add(effectController, 'Reset');
-	miscFolder.add(effectController, 'Toggle_Hud');
-	miscFolder.add(effectController, 'Switch_camera');
-	miscFolder.add(effectController, 'HUD_scale', 0.2, 2.8, 0.1).onChange(function () {
+	//var miscFolder = gui.addFolder('Miscellaneous');
+	gui.add(effectController, 'Toggle_Hud').name("Enable-disable HUD");
+	
+	gui.add(effectController, 'HUD_scale').name("HUD scaling").min(0.2).max(2.8).step(0.1).onChange(function () {
 		TextScaleFactor = effectController.HUD_scale;
 		OK_hud=false; 
 		helpReady=false;
 		lineOffset = 3*TextScaleFactor/1.5;
 	});
+	gui.add(effectController, 'Switch_camera').name("Change camera type");
+	gui.add(effectController, 'Explode').name("Explosion animation");
 	/* help button */
-	gui.add(effectController, 'Help');
+	
 }
 
 /* initialization: executed at page load */
@@ -114,8 +120,6 @@ function Init() {
 	hudScene.add(HelpObj);
 	HelpObj.visible = false;
 
-	/* prepare dat GUI */
-	prepareGUI();
 }
 
 /* menu variables */
