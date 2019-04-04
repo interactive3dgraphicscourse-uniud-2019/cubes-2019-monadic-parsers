@@ -27,7 +27,7 @@ Oltre ai requisiti base, si pensava di:
 * Creare un font che verrà utilizzato per il testo del menù
 * Aggiungere delle animazioni al menù quando si cambia pagina o si seleziona un campo da modificare
 
-
+<br />
 ## Proposte e loro valutazione
 Questa sezione si occupa di raccogliere varie proposte implementative con conseguente analisi.
 ### Schermo intero
@@ -69,6 +69,8 @@ Viene deciso di mostrare sia comandi che opzioni, come descritto in precedenza, 
 * Troppe informazioni possono confondere l'utente
 
 Viene aggiunta quindi la possibilità di nascondere o visualizzare l'HUD tramite un pulsante.
+
+<br />
 ### Menù
 Viene discusso il design e l'implementazione del menù delle opzioni.
 #### Inserimento
@@ -123,6 +125,7 @@ Viene proposta una legenda dei comandi da dare al sistema per effettuare determi
 * X : visualizza/nascondi HUD
 * E : esplosione della matrice di gioco
 
+<br />
 ## Modifiche
 
 #### Menù
@@ -147,6 +150,7 @@ In compenso, ora si può scegliere di visualizzare la scena con una camera ortog
 #### Pulsanti
 Dato che si è deciso di rimuovere il menù, il pulsante "P" verrà utilizzato per cambiare la camera di visualizzazione della scena da prospettica ad ortogonale e viceversa.
 
+<br />
 ## Progressi
 #### 26/03/2019
 * Implementazione dell'algoritmo del gioco della vita;
@@ -184,6 +188,7 @@ Dato che si è deciso di rimuovere il menù, il pulsante "P" verrà utilizzato p
 #### 03/04/2019
 * Miglioramento del menù delle opzioni;
 
+<br />
 ## Bug e soluzioni
 #### Somma in Javascript
 **Sintomo:** Fallimento del rendering dei colori delle celle, crash dopo l'aggiornamento dei parametri.
@@ -192,6 +197,7 @@ Dato che si è deciso di rimuovere il menù, il pulsante "P" verrà utilizzato p
 
 **Risoluzione:**  È stato forzato il cast verso interi del tipo ambiguo tramite operatori matematici.
 
+<br />
 #### Colorazione della matrice di cubi
 **Sintomo:** La colorazione dei cubi non sembrava corretta, nonostante ci fossero molti cubi vicini il colore  rimaneva giallo senza tendere mai al rosso.
 
@@ -199,6 +205,7 @@ Dato che si è deciso di rimuovere il menù, il pulsante "P" verrà utilizzato p
 
 **Risoluzione:** È stato forzato il cast verso interi della variabile coinvolta tramite operatori matematici.
 
+<br />
 #### Mesh
 **Sintomo:** L'aggiornamento dei colori non dà il risultato aspettato.
 
@@ -206,6 +213,7 @@ Dato che si è deciso di rimuovere il menù, il pulsante "P" verrà utilizzato p
 
 **Risoluzione:** Vengono inizialmente creati tutti i materiali definendo il colore e per l'aggiornamento si modifica il materiale assegnato ai cubi.
 
+<br />
 #### Caricamento font
 **Sintomo:** La funzione di caricamento dei font restituisce un valore indefinito.
 
@@ -213,6 +221,7 @@ Dato che si è deciso di rimuovere il menù, il pulsante "P" verrà utilizzato p
 
 **Risoluzione:** Utilizzo di una variabile globale per memorizzare i dati.
 
+<br />
 #### HUD
 **Sintomo**: L'HUD non è reattivo con le dimensioni della pagina.
 
@@ -220,6 +229,7 @@ Dato che si è deciso di rimuovere il menù, il pulsante "P" verrà utilizzato p
 
 **Risoluzione**: Abbiamo sfruttato textures e canvas per rendere scalabile la scena.
 
+<br />
 #### Esplosione
 **Sintomo**: Se l'esplosione avviene durante un movimento della matrice di cubi, questa non avviene corettamente.
 
@@ -227,7 +237,7 @@ Dato che si è deciso di rimuovere il menù, il pulsante "P" verrà utilizzato p
 
 **Risoluzione**: È stato aggiunto del codice per gestire questo caso, ora l'esplosione avviene correttamente anche se la matrice è in movimento.
 
-
+<br />
 #### Comandi in conflitto
 **Sintomo**: Il comando di help non funziona correttamente.
 
@@ -235,10 +245,10 @@ Dato che si è deciso di rimuovere il menù, il pulsante "P" verrà utilizzato p
 
 **Risoluzione**: Eliminata la sezione di codice di default che utilizzava il tasto H per nascondere il menù opzioni.
 
-### Compatibilità con  i browser
+<br />
+#### Compatibilità con  i browser
 **Sintomo**: La scena di gioco non viene visualizzata correttamente utilizzando il browser Google Chrome.
 
 **Problema**: Nel browser l'evento che carica il menù delle opzioni (PaperGUIRead) non viene triggerato.
 
 **Risoluzione**: È stata inserita una funzione che tenta il caricamento del menù ad ogni frame fino alla sua riuscita, segnalata tramite flag.
-
