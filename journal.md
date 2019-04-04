@@ -157,15 +157,22 @@ Dato che si è deciso di rimuovere il menù, il pulsante "P" verrà utilizzato p
 * Visualizzazione della scena;
 * Aggiunta della possibilità di modificare le impostazioni;
 
+![initial](https://raw.githubusercontent.com/redsnic/I3DG_Uniud/master/images/progetto1/journal/initial.JPG)
+
 #### 29/03/2019
 * Aggiunta funzione di rotazione della camera;
 * Aggiunta funzionalità di rotazione della matrice di cubi;
 
 #### 30/03/2019
+* Progettazione della interfaccia e del menù;
 * Aggiunta di colori e trasparenze;
 * Creazione terreno e bitmap;
 * Aggiunta della funzione di esplosione;
 * Creazione del font ad-hoc;
+
+![plan1](https://raw.githubusercontent.com/redsnic/I3DG_Uniud/master/images/progetto1/journal/plan_1.jpg)
+![plan3](https://raw.githubusercontent.com/redsnic/I3DG_Uniud/master/images/progetto1/journal/plan_3.jpg)
+![plan2](https://raw.githubusercontent.com/redsnic/I3DG_Uniud/master/images/progetto1/journal/plan_2.jpg)
 
 #### 31/03/2019
 * Applicate migliorie alla funzione di esplosione;
@@ -200,6 +207,8 @@ Dato che si è deciso di rimuovere il menù, il pulsante "P" verrà utilizzato p
 
 #### Colorazione della matrice di cubi
 **Sintomo:** La colorazione dei cubi non sembrava corretta, nonostante ci fossero molti cubi vicini il colore  rimaneva giallo senza tendere mai al rosso.
+
+![bug_colors](https://raw.githubusercontent.com/redsnic/I3DG_Uniud/master/images/progetto1/journal/bug_colors.JPG)
 
 **Problema:** Analogo al problema della somma descritto in precedenza, ma di più difficile rilevazione, dato che non venivano segnalati errori sulla console di output.
 
