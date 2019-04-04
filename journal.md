@@ -115,7 +115,7 @@ Inoltre, è stato scelto di utilizzare lo spazio colori HSL per indicare i color
 Viene proposta una legenda dei comandi da dare al sistema per effettuare determinate azioni, riportate poi nell'help del programma.
 * ← → ↑ ↓ : rotazione della matrice di gioco di 45 gradi nella direzione indicata
 * . (punto) : allineamento della martice di gioco con la camera
-* N : fare avanzare il gioco di un passo
+* Enter : fare avanzare il gioco di un passo
 * A : il gioco avanza automaticamente secondo l'impostazione di tempo inserita
 * P : apre il menù delle opzioni
 * H : apre un aiuto che mostra tutti i comando
@@ -183,7 +183,6 @@ Dato che si è deciso di rimuovere il menù, il pulsante "P" verrà utilizzato p
 
 #### 03/04/2019
 * Miglioramento del menù delle opzioni;
-* Testing;
 
 ## Bug e soluzioni
 #### Somma in Javascript
@@ -235,3 +234,11 @@ Dato che si è deciso di rimuovere il menù, il pulsante "P" verrà utilizzato p
 **Problema**: Il tasto H viene utilizzato sia da noi per mostrare i comandi sia di default per nascondere il menù, quindi si verifica un conflitto.
 
 **Risoluzione**: Eliminata la sezione di codice di default che utilizzava il tasto H per nascondere il menù opzioni.
+
+### Compatibilità con  i browser
+**Sintomo**: La scena di gioco non viene visualizzata correttamente utilizzando il browser Google Chrome.
+
+**Problema**: Nel browser l'evento che carica il menù delle opzioni (PaperGUIRead) non viene triggerato.
+
+**Risoluzione**: È stata inserita una funzione che tenta il caricamento del menù ad ogni frame fino alla sua riuscita, segnalata tramite flag.
+
