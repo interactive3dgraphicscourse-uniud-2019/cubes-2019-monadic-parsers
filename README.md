@@ -3,6 +3,8 @@ Students: Lorenzo Iuri, Simone Mezzavilla, Nicolò Rossi
 
 Notice: the number of commits of each github account does not represent the actual amount of worktime and codelines of each member of the team; this is because most of the project was done while all the team members where working together in the same place, and usually the commit procedure was preceded by a code-merging phase, in which the various parts of the new codelines (already tested) were reviewed and merged.
 
+<img src="https://raw.githubusercontent.com/redsnic/I3DG_Uniud/master/images/progetto1/report/main.png" width="100%">
+
 ## Introduction
 The basic idea of this project is to adapt the 2D "Game of Life" to a 3D version, maintaining the core rules of the standard game. The traditional 2D version provide a n x m cell matrix, which evolves during the game activating ("keeping alive") and deactivating ("killing") its cells at every step. The rules are as follows:
 * One cell needs to have a set amount of neighbouring cells to survive the next step and be kept alive. If the amount it has is not enough or too much, the cell is killed. Using the same line of reasoning a cell can also resurrect, if it has the correct number of neighbouring cells. 
@@ -29,6 +31,9 @@ In order to improve the memory usage of the game the 26 colored materials are co
 ### Terrain
 The terrain underlying the game is a pyramid built using transparent cubes, it is procedurally generated from a 15x15 pixel heightmap file. This dimension is a good compromise between efficiency and appearance quality.
 
+<img src="https://raw.githubusercontent.com/redsnic/I3DG_Uniud/master/images/progetto1/report/terrain2.PNG" width="100%">
+
+
 ### HUD
 The game HUD shows:
 * Current FPS
@@ -38,6 +43,10 @@ The game HUD shows:
 * Command list (if toggled)
 
 The HUD may be hidden using the corrisponding command.
+
+<img src="https://raw.githubusercontent.com/redsnic/I3DG_Uniud/master/images/progetto1/report/hud.PNG" width="100%">
+<img src="https://raw.githubusercontent.com/redsnic/I3DG_Uniud/master/images/progetto1/report/help.PNG">
+
 
 #### Font
 In order to produce a better-looking HUD interface, the development team decided to create a custom font, inspired by the 'Arcade Classics' font, used to show the HUD. This was made by creating a multitude of text documents (one for each character) containing a 7x7 0-1 matrix representing a single character. These documents are then loaded into the system whenever the game page is opened. Every character is a Three.js Object3D, composed by voxels, following the associated matrix pattern.
@@ -57,12 +66,20 @@ The options menu, which can be opened pressing the blue pencil icon on the top o
 
 Every change in the options is immediately applied.
 
+![](https://raw.githubusercontent.com/redsnic/I3DG_Uniud/master/images/progetto1/report/settings1.png) ![](https://raw.githubusercontent.com/redsnic/I3DG_Uniud/master/images/progetto1/report/settings2.PNG)
+
+
 ## Functions
 In this section are described the various functions of the system.
 ### Rotation
 A function which allows the rotation of the voxels matrix was added to the system. The user is able to rotate the game scene of 45 degrees in 4 directions, based on the position of the voxels matrix, since the rotations are made on its axis. In addition, the user is also able to reposition the game scene, in which case the matrix will rotate and end up facing the camera.
+
+![main2](https://raw.githubusercontent.com/redsnic/I3DG_Uniud/master/images/progetto1/report/main2.PNG)
+
 ### Explosion
 It has been added a function which consist in "exploding" the game matrix and the terrain. Each single cube will move away from the origin following a projectile motion, while at the same time falling, since the gravity's effect was manually added to the scene.
+
+<img src="https://raw.githubusercontent.com/redsnic/I3DG_Uniud/master/images/progetto1/report/explosion_combined.png" width="100%">
 
 ### Game progression
 The game evolves at each step, and the user has two ways of advancing to the next step of the game, in which some cubes will activate, others deactivate, and some may change color. The matrix and camera position won't change.
@@ -77,6 +94,8 @@ This function will reposition the camera to its starting coordinates, maintainin
 #### Toggle camera
 This function switches from a perspective camera to an ortographic camera, and viceversa. After each toggle, the camera will capture the scene positioned in its starting default coordinates.
 ## Commands
+## Window scaling
+![mobile](https://raw.githubusercontent.com/redsnic/I3DG_Uniud/master/images/progetto1/report/mobile.png)
 ## Planning steps
 ### Future improvements
 A set of improvements may be added to the project in the near future:
