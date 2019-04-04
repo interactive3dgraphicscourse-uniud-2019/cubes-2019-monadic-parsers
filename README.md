@@ -1,117 +1,87 @@
-# Modeling and rendering with boxes
+# Report - Game of Life
+Students: Lorenzo Iuri, Simone Mezzavilla, Nicolò Rossi
 
-![Image from Minecraft](https://jordanweagly.files.wordpress.com/2012/02/figure_4.png)
+Notice: the number of commits of each github account does not represent the actual amount of worktime and codelines of each member of the team; this is because most of the project was done while all the team members where working together in the same place, and usually the commit procedure was preceded by a code-merging phase, in which the various parts of the new codelines (already tested) were reviewed and merged.
 
-## Prerequisites
+## Introduction
+The basic idea of this project is to adapt the 2D "Game of Life" to a 3D version, maintaining the core rules of the standard game. The traditional 2D version provide a n x m cell matrix, which evolves during the game activating ("keeping alive") and deactivating ("killing") its cells at every step. The rules are as follows:
+* One cell needs to have a set amount of neighbouring cells to survive the next step and be kept alive. If the amount it has is not enough or too much, the cell is killed. Using the same line of reasoning a cell can also resurrect, if it has the correct number of neighbouring cells. 
+* The amount of neighbouring cells must be included between a minimum and a maximum number, set at the beginning of the game. 
+* The cells start the game randomly activated or deactivated.
 
-- read carefully all slides and notes up to lecture 8 before you start. Try the proposed exercises.
-- familiarize with git and github:
-	- [Codecademy’s Learn Git](https://www.codecademy.com/learn/learn-git)
-	- [Git Resources for Visual Learners](https://changelog.com/posts/git-resources-for-visual-learners)
-	- [Introduction to GitHub for Newcomers](https://www.youtube.com/watch?v=uNa9GOtM6NE&feature=youtu.be)
-	- [Github desktop application](https://desktop.github.com)
-- [download three.js r102 and examples](https://github.com/mrdoob/three.js/archive/master.zip)
+What makes this game interesting are the various patterns that are created during the progression of the game, which may be endless.
+As for the 3D version, implemented in this project, the rules are maintained but adapted to a 3D environment. The cells are represented as colored voxels.
 
-## Hints
+## Scene composition
+In this section are described the components of the game scene.
+### Voxels matrix
+The main component of the scene is the game matrix, an m x n x p parallelepiped composed by colored cubes. Active cubes are shown and colored, while deactiveted cubes are not. The matrix is centered in the origin.
+#### Coloring
+The color assigned to each voxel depends on the number of its neighbouring cells:
+- Green cells will be still alive after the next game step
+- Blue cells have not enough neighbouring cells and will die after the next step
+- Red cells have too many neighbouring cells and will die after the next step
 
-- Try to work out a basic project which satisfies all requirements well before the deadline and as soon as possible: you will then use the remaining time to refine, improve and polish.
-- If you are stuck for too much time on a problem, ask for help, preferably in the forum.
-- the process is as important as the result. Use this project to learn a workflow, and how to use tools effectively. Experiment, and try to come up with efficient, elegant, and well commented code.
-- commit often in your git repository and with meaningful comments. 
+So, the colors of the game stands for the "health" of the cubes. Colors ranging from yellow to red represents the cubes that will die from overpopulation and the range of blues represents the ones that doesn't have enough neightbours to stay alive.
 
-## Goals 
-In this project you'll first create an interesting scene of your own design, made up just of boxes. The boxes can be
-translated, scaled and rotated as you wish. For inspiration, look at [Minecraft](https://minecraft.net/en-us/), 
-Legos, and voxel-based games such as [Crossy Road](http://www.crossyroad.com).
+In order to improve the memory usage of the game the 26 colored materials are computed during the game reset phase and assigned to the cubes during the game progress. Note that the materials cannot be computed before the game setup (hardcoded) because these depends from the game parameters settings.
 
-I am not expecting something highly complex, but I expect something **interesting** and that you use **at least 30 boxes**.
+### Terrain
+The terrain underlying the game is a pyramid built using transparent cubes, it is procedurally generated from a 15x15 pixel heightmap file. This dimension is a good compromise between efficiency and appearance quality.
 
-In addition, provide your model with a simple but meaningful animation. To do this, you'll have to structure the scene
-graph in a convenient way. The animation can continuosly play itself, or can be controlled by the user through UI controls.
+### HUD
+The game HUD shows:
+* Current FPS
+* Height, depth and length of the voxel matrix selected for the current game
+* Number range representing the amount of neighbouring cells necessary to a cell to stay active
+* Number range representing the amount of neighbouring cells necessary to a cell to become active
+* Command list (if toggled)
 
-After creating a scene, you have a choice:
+The HUD may be hidden using the corrisponding command.
 
-- if you are more interested in programming, you can choose to create a terrain for your scene, using a heightmap in the
-form of a greyscale image as input;
-- alternatively, you can choose to create a short movie that presents your scene.
+#### Font
+In order to produce a better-looking HUD interface, the development team decided to create a custom font, inspired by the 'Arcade Classics' font, used to show the HUD. This was made by creating a multitude of text documents (one for each character) containing a 7x7 0-1 matrix representing a single character. These documents are then loaded into the system whenever the game page is opened. Every character is a Three.js Object3D, composed by voxels, following the associated matrix pattern.
 
-In either case, see the next sections for more detailed instructions and suggestions. You are also required to document your
-work and write a final report, as detailed below. 
+The font generation was made in such a way that each character is easily replaceable and modifiable.
 
-## Starting code
+### Options menu
+The options menu, which can be opened pressing the blue pencil icon on the top of the scene, displays the various modifiable game options, as well as the interface ones. This way, the user is able to:
+* Change the size of the game matrix
+* Modify the spawn probability of the cubes (a higher percentage means more starting activated cubes)
+* Reset and manually progress into the game
+* Set the value ranges of the cells to activate or deactivate during the next step
+* Toggle the auto progress of the game and set the time between each step
+* Show/hide HUD and scale it
+* Change camera type
+* Apply the explosion function
 
-I have provided two starting scenes, one without lights and textures, and one which includes a basic lighting setup 
-and an example of texture usage. Your final result should be obtained by modifiying ONE of these files. 
+Every change in the options is immediately applied.
 
-Choose the one you prefer based on the kind of result you want to obtain, and how much you want to experiment with features we haven't yet explained in our lectures. You are free to do any modifications, including replacing my code, e.g. to use an orthographic camera instead of a perspective one.
+## Functions
+In this section are described the various functions of the system.
+### Rotation
+A function which allows the rotation of the voxels matrix was added to the system. The user is able to rotate the game scene of 45 degrees in 4 directions, based on the position of the voxels matrix, since the rotations are made on its axis. In addition, the user is also able to reposition the game scene, in which case the matrix will rotate and end up facing the camera.
+### Explosion
+It has been added a function which consist in "exploding" the game matrix and the terrain. Each single cube will move away from the origin following a projectile motion, while at the same time falling, since the gravity's effect was manually added to the scene.
 
-For the box materials, without lights you can use MeshBasicMaterial for solid, textured, or wireframe rendering. 
+### Game progression
+The game evolves at each step, and the user has two ways of advancing to the next step of the game, in which some cubes will activate, others deactivate, and some may change color. The matrix and camera position won't change.
+#### Manual next step
+Using a command, the user can advance in the game by a single step.
+#### Auto mode
+By selecting a particular option in the option menu, the game will progress automatically, advancing by one step every set amount of time, which can be modified in the option menu.
+### Camera
+The scene camera captures the game starting in a default position, but the user is able to move it using standard commands, being able to zoom in and out, rotate and translate (using OrbitControl.js).
+#### Camera reset
+This function will reposition the camera to its starting coordinates, maintaining the game status.
+#### Toggle camera
+This function switches from a perspective camera to an ortographic camera, and viceversa. After each toggle, the camera will capture the scene positioned in its starting default coordinates.
+## Commands
+## Planning steps
+### Future improvements
+A set of improvements may be added to the project in the near future:
+* The possibility to initialize the game matrix using a matrix indicating which cubes will begin the game activated, via .jjba documents
 
-When using lights, it is better to use MeshPhongMaterial for the boxes. The example also includes some code to render shadows; if you like the effect, you'll need to write similar code for all the boxes you will insert, or you can remove it entirely for rendering without shadows.
-
-The third starting code file is necessary only if you choose to create a terrain. It loads a *m by n* PNG image from a file and builds an array of *m x n* values where each value is a greyscale value in the range 0-255. The code assumes that the image is composed by four channels (RGBA) and the value of the three RGB channel is the same. If you use another kind of image, you will have to modify the code accordingly.
-
-## Steps 
-
-1. clone the starting code in the repository.
-2. examine the starting code carefully. In the case of the code which uses lights, we are using stuff that has not been explained in the course yet. However, with some help from the [three.js documentation](https://threejs.org/docs/index.html#Manual/Introduction/Creating_a_scene), it should not be too hard to figure out what each line does. Try to play with the code and modify values, and gain some understanding by observing the result of your changes. Often, we don't need to fully understand how code really function, or the underlying theory.
-3. Prepare, and add to the repository, a journal.md file for logging your progress and choices.
-3. design and implement your scene. Here, you can choose between different methods; it is a good exercise to try a couple of different alternatives (however, this is not mandatory)
-	- design your scene on graphed paper, deriving, for each box, the necessary translation, rotation, and scaling values. Then, you can directly code the scene in three.js
-	- prototype your scene in Unity. Placing, rotating, and scaling grey boxes is straightforward, as we showed in classroom. You can change the color
-	or texture of a box by: (i) creating a new material; (ii) assigning the material to the box; (iii) changing, in the inspector, the material albedo color or texture. See the [Unity documentation for these operations](https://docs.unity3d.com/Manual/Materials.html). You can then reproduce the scene in three.js.
-	- directly create your scene using the [three.js editor](https://threejs.org/editor/). In this case, you can use the "scene export" function to directly export the scene in the json-based three.js scene format. Once the result is saved as text file, it should be possible to load it into three.js using the (deprecated) SceneLoader or the new ObjectLoader. I write "it should be possible" because it is not entirely clear if and which of the two will work. So, in theory this solution requires the least amount of work; in practice, it will probably require you to dig into three.js code and maybe spend a few minutes googling for answers to problems. This is quite common with complex, continuously developed code such as three.js and game engines. You will always find bugs, poorly documented features or outdated examples. Learning how to cope with this situations, how to search and ask for help, e.g. on AnswerHub is an important skill than any developer should acquire.
-4. design and implement an animation. Aim for simple animations that can be expressed by a few translations or rotations, or that can be programmed through simple mathematical relations or even physics equations (like Kinematic equations). You might need to introduce nodes (Object3D) in your scene graph to make the animations easier to implement. As with several examples that we have seen, you can make the animation user-controllable by using [dat.gui] (https://github.com/dataarts/dat.gui). Look in three.js examples for how to connect the GUI controls to your scene.
-5. At this point, you need to choose whether to add a terrain or create a short movie. These alternative steps are explained below.
-6. Create a report of your work by the due deadline.
-
-### Adding a terrain
-
-The code in StartingCode-heightmap loads a greyscale image from a file and creates and array of the same m x n size of the image, where the value in each cell ranges from 1 (black) to 63,75 (white). 
-Write a function that takes this array, and creates a grid of boxes on the XZ plane, where the scaling and translation in Y for each box is proportional to the value read in the array, meaning that you should choose a proportionality factor that makes the terrain look good. In other words, you are treating the image as an **heightmap**, where the greyscale value corresponds to the height of the corresponding point. 
-
-You can also choose the box color or texture based on the heightmap value, e.g. white color for high values (snow), grey color for medium values (rocks), green color for lower values (grass), but this is just an example.
-
-### Creating a short movie
-
-Remove the code for orbiting the camera with the mouse and plan camera movements (e.g., pan, arcing, traveling) and cuts. In the Update function, using the Date.now() Javascript function (that returns the number of milliseconds elapsed since 1 January 1970 00:00:00 UTC) you can check how much time is passed since the application started and then activate the correct camera animation.
-
-For producing the movie, you can use some screen capture application, and then, if you want, you can use video editing software to apply post effects, transitions, and color correction.	
-
-## Documenting and report
-
-For project documentation and reporting, we use the [markdown format](https://daringfireball.net/projects/markdown/syntax), which is also the format of this document. Markdown is a lightweight markup language with plain text formatting syntax which is easy and quick to write, very human-readable, and that can be converted to HTML.
-
-If you need more features than the ones that markdown provides (e.g. writing equations), you can use one of its extensions called [markdeep](https://casual-effects.com/markdeep/). For this project, however, markdown shoud be enough.  
-
-You are required to document your project in two ways:
-
-- maintain a journal (in a file called journal.md) describing key design decisions, changes, bug symptoms and solutions, including screenshots.
-- create a report (in the readme.md file).
-
-The report should be as brief as possible while covering the following points:
-
-- overall description: what your project is about and the files it uses.
-- results, including images of the scenes created, taken in a way that clearly illustrates that they satisfy the specification.
-- brief explanation of the process that you used to make your scene. Include tools, assets, and planning steps.
-
-## Constraints
-
-If you use textures, please make sure that you have the rights to include them. For example, search for images that come with a [CC Attribution, ShareAlike or NonCommercial licences](https://creativecommons.org/share-your-work/licensing-types-examples/). 
-
-You are allowed to take inspiration, or create models that reproduce what you see in images on the internet, but copying others' work, even with slight modifications, is forbidden and will have serious consequences beyond the deletion of your project. In any case, mention any source of inspiration in your journal and final report.
-
-## Follow-up
-
-You are welcome to extend your project after the deadline, in any way your think is interesting. For example, you could add javascript libraries that analyze music and derive values in real-time that can be fed to three.js for animation purposes, or you could extend your terrain generation software such that hidden box faces are not created in three.js. If you do that before the final exam, you might get bonus points for this kind of activies - just let me know any progress you make.
-
-## Credits
-
-This project is inspired by the [Cubes Graphics Codex Project](http://graphicscodex.com/projects/cubes/index.html) by Morgan McGuire.
-
-If you like voxels, check out [this three.js-based project](http://voxeljs.com).
-
-## Useful material and references
-
-Sometimes, some feature of the Javascript language can be tricky: [a growing list of quirks](http://bonsaiden.github.io/JavaScript-Garden/)
-
+## References
+* Game of life additional information: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
+* Arcade classic font: https://www.dafont.com/arcade-classic-pizz.font
