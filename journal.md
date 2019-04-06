@@ -129,9 +129,11 @@ Viene proposta una legenda dei comandi da dare al sistema per effettuare determi
 ## Modifiche
 
 #### Menù
-L'idea originale sarebbe stata quella di creare un menù su più pagine nella scena che permetteva modifica e inserimento di opzioni di gioco, sfruttando una camera ortogonale aggiuntiva. Per motivi di tempo, è stato deciso di optare per un menù creato in HTML, esterno. Le opzioni sono divise per sezione, e saranno modificabili tramite slider o inserimento. Inoltre si può scegliere di aprire o chiudere il menu tramite un pulsante posizionato in alto a destra della scena.
+L'idea originale sarebbe stata quella di creare un menù su più pagine nella scena che permetteva modifica e inserimento di opzioni di gioco, sfruttando una camera ortogonale aggiuntiva. Per motivi di tempo e per
+mantenere la compatibilità con i sistemi mobili, è stato deciso di optare per un più classico
+menù in HTML-Javascript. Le opzioni saranno divise per sezione, e modificabili tramite slider o inserimento. Inoltre si può scegliere di aprire o chiudere il menu tramite un pulsante posizionato in alto a destra della scena.
 
-Si è poi deciso di sostituire il pannello dat.gui usato in precedenza con quello attuale, perché si adatta meglio alla dimensione dello schermo e la visualizzazione risulta corretta anche su altri dispositivi (tablet e smartphone).
+Si è poi deciso di sostituire il pannello dat.gui usato in precedenza con quello attuale (paperGUI), perché si adatta meglio alla dimensione dello schermo e la visualizzazione risulta corretta anche su altri dispositivi (tablet e smartphone).
 
 #### HUD
 Dopo una discussione, si è deciso di posizionare gli elementi del HUD nel seguente modo:
@@ -215,14 +217,6 @@ Dato che si è deciso di rimuovere il menù, il pulsante "P" verrà utilizzato p
 **Risoluzione:** È stato forzato il cast verso interi della variabile coinvolta tramite operatori matematici.
 
 
-#### Mesh
-**Sintomo:** L'aggiornamento dei colori non dà il risultato aspettato.
-
-**Problema:** Non è possibile creare un unico materiale, assegnarlo ai cubi e aggiornare poi solo il colore.
-
-**Risoluzione:** Vengono inizialmente creati tutti i materiali definendo il colore e per l'aggiornamento si modifica il materiale assegnato ai cubi.
-
-
 #### Caricamento font
 **Sintomo:** La funzione di caricamento dei font restituisce un valore indefinito.
 
@@ -236,8 +230,8 @@ Dato che si è deciso di rimuovere il menù, il pulsante "P" verrà utilizzato p
 
 **Problema**: Per migliorare la visione dell'HUD si vuole che  questo sia sempre di una dimensione proporzionale a quella dello schermo in uso.
 
-**Risoluzione**: Abbiamo sfruttato textures e canvas per rendere scalabile la scena.
-
+**Risoluzione**: Inizialmente abbiamo sfruttato textures e canvas per rendere scalabile la scena. Successivamente, per evitare problemi di bassa risoluzione, abbiamo realizzato un font 3D in grado
+di simulare le caratteristice di scaling di un font vettoriale.
 
 #### Esplosione
 **Sintomo**: Se l'esplosione avviene durante un movimento della matrice di cubi, questa non avviene corettamente.
@@ -252,12 +246,13 @@ Dato che si è deciso di rimuovere il menù, il pulsante "P" verrà utilizzato p
 
 **Problema**: Il tasto H viene utilizzato sia da noi per mostrare i comandi sia di default per nascondere il menù, quindi si verifica un conflitto.
 
-**Risoluzione**: Eliminata la sezione di codice di default che utilizzava il tasto H per nascondere il menù opzioni.
+**Risoluzione**: modificata la libreria paperGUI affinché la pressione di H non causi alcun effetto.
 
 
 #### Compatibilità con  i browser
 **Sintomo**: La scena di gioco non viene visualizzata correttamente utilizzando il browser Google Chrome.
 
-**Problema**: Nel browser l'evento che carica il menù delle opzioni (PaperGUIRead) non viene triggerato.
+**Problema**: Nel browser l'evento che carica il menù delle opzioni (PaperGUIRead) non viene 
+attivato o catturato dal gestore.
 
 **Risoluzione**: È stata inserita una funzione che tenta il caricamento del menù ad ogni frame fino alla sua riuscita, segnalata tramite flag.
