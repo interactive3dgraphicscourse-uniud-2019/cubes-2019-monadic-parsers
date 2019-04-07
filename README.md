@@ -115,6 +115,7 @@ The planning and development process followed these steps:
 ### Future improvements
 A set of improvements may be added to the project in the near future:
 * The possibility to initialize the game matrix using a matrix indicating which cubes will begin the game activated, via `.jjba` files
+* Performance test using WebGL2
 ## Files used
 The files used by the game (font files, heightmap) are stored in the `res` directory. 
 ## References
