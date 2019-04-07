@@ -53,7 +53,7 @@ The HUD may be hidden using the corrisponding command.
 
 
 #### Font
-In order to produce a better-looking HUD interface, the development team decided to create a custom 3D font inspired by the `Arcade Classics` font. This was made by preparing a multitude of text documents (one for each character) containing a `7x7` 0-1 matrix representing a single character. These documents are then loaded into the system whenever the game page is opened. Every character is a `Three.js Object3D` composed by voxels and following the associated matrix pattern. We can then produce arbitrary strings as single objects and perpare
+In order to produce a better-looking HUD interface, the development team decided to create a custom 3D font inspired by the `Arcade Classics` font. This was made by preparing a multitude of text documents (one for each character) containing a `7x7` 0-1 matrix representing a single character. These documents are then loaded into the system whenever the game page is opened. Every character is a `Three.js Object3D` composed of voxels and following the associated matrix pattern. We can then produce arbitrary strings as single objects and perpare
 additional information for screen alignement and positioning.
 
 The font generation was made in such a way that each character is easily replaceable and modifiable.
@@ -82,7 +82,7 @@ A function which allows the rotation of the voxels matrix was added to the syste
 ![main2](https://raw.githubusercontent.com/redsnic/I3DG_Uniud/master/images/progetto1/report/main2.PNG)
 
 ### Explosion
-It has been added a function which consist in "exploding" the game matrix and the terrain. Each single cube will move away from the origin following a projectile motion. Such a motion is composed by a rectilinear uniform motion on a direction parallel to the XZ plane and a uniform accelerated motion on another
+It has been added a function which consist in "exploding" the game matrix and the terrain. Each single cube will move away from the origin following a projectile motion. Such a motion is composed of a rectilinear uniform motion on a direction parallel to the XZ plane and a uniform accelerated motion on another
 direction that is instead orthogonal to the XZ plane.
 
 <img src="https://raw.githubusercontent.com/redsnic/I3DG_Uniud/master/images/progetto1/report/explosion_combined.png" width="100%">
