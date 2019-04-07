@@ -3,7 +3,7 @@ Students: Nicolò Rossi, Lorenzo Iuri, Simone Mezzavilla
 
 <img src="https://raw.githubusercontent.com/redsnic/I3DG_Uniud/master/images/progetto1/report/main.png" width="100%">
 
-Notice: the number of commits of each github account does not represent the actual amount of worktime and codelines of each member of the team; this is because most of the project was done while all the team members where working together in the same place, and usually the commit procedure was preceded by a code-merging phase, in which the various parts of the new codelines (already tested) were reviewed and merged.
+Disclaimer: the number of commits of each github account does not represent the actual amount of worktime and codelines of each member of the team; this is because most of the project was done while all the team members where working together in the same place, and usually the commit procedure was preceded by a code-merging phase, in which the various parts of the new codelines (already tested) were reviewed and merged.
 
 ## Introduction
 The basic idea of this project is to adapt the 2D "Game of Life" to a 3D version, maintaining the core rules of the standard game. The traditional 2D version provide a `n x m` cell matrix, which evolves during the game activating ("keeping alive") and deactivating ("killing") its cells at every step. The rules are as follows:
